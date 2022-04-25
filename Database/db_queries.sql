@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `email` varchar(255) NOT NULL,
     `password` varchar(255) NOT NULL,
     `avatar` varchar(255) NOT NULL,
-    `admin` boolean NOT NULL,
+    `admin` boolean NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 CREATE TABLE IF NOT EXISTS `questions` (
