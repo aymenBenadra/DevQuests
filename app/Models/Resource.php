@@ -20,7 +20,7 @@ class Resource extends Model
             'title' => 'required|string',
             'description' => 'required|string',
             'link' => 'required|string',
-            'visited' => 'required|bool',
+            'visited' => 'bool',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
         ]);
