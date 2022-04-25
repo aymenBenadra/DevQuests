@@ -22,7 +22,7 @@ class User extends Model
             'name' => 'required|string',
             'email' => 'required|email',
             'password' => 'required|string',
-            'admin' => 'required|bool',
+            'admin' => 'bool',
         ]);
         $this->table = 'Users';
     }
