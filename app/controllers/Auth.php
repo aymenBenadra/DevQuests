@@ -3,8 +3,9 @@
 namespace App\Controllers;
 
 use Core\{Controller, Router};
-use Core\Helpers\Response;
+use Core\Helpers\{Validator, Response};
 use Firebase\JWT\{JWT};
+use Jdenticon\Identicon;
 
 /**
  * Auth Controller
@@ -26,113 +27,100 @@ class Auth extends Controller
     }
 
     /**
-     * Register a new user
+     * Register new User
      * 
      * @param array $data
      * @return void
      */
-    public function registerHeader($data = [])
+    public function register($data = [])
     {
-        // Generate headerRef to data
-        $data['headerRef'] = uniqid("example_");
+        $user = $this->model('User')->getBy('username', $data['username']);
 
-        if (!$this->model('Example')->add($data)) {
-            Router::abort(500, json_encode([
+        if ($user) {
+            Router::abort(400, [
                 'status' => 'error',
-                'message' => 'Server error'
-            ]));
+                'message' => 'Username already taken'
+            ]);
         }
 
-        $example = $this->model('Example')->get(
-            $this->model('Example')->getLastInsertedId()
-        );
+        $user = $this->model('User')->getBy('email', $data['email']);
+
+        if ($user) {
+            Router::abort(400, [
+                'status' => 'error',
+                'message' => 'Email already exists'
+            ]);
+        }
+
+        // Hash password
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+
+        // Generate Identicon
+        $avatar = new Identicon(array(
+            'value' => $data['username'],
+            'size' => 100
+        ));
+        $avatar = $avatar->getImageData('svg');
+
+        // Save avatar in idonticons folder
+        file_put_contents(dirname(dirname(__DIR__)) . "/public/identicons/" . $data['username'] . ".svg", $avatar);
+
+        // Save avatar file name to database (without path)
+        $data['avatar'] = $data['username'] . ".svg";
+
+        if (!$this->model('User')->add($data)) {
+            Router::abort(500, [
+                'status' => 'error',
+                'message' => 'Server error'
+            ]);
+        }
+
+        $user = $this->model('User')->get($this->model('User')->getLastInsertedId());
+
+        unset($user->password, $user->id);
 
         Response::send([
-            'status' => 'success',
-            'data' => $example
+            'status' => 'Registered successfully!',
+            'data' => $user
         ]);
     }
 
     /**
-     * Login a user using headerRef
+     * Register new Admin
+     * 
+     * @param array $data
+     * @return void
+     */
+    public function registerAdmin($data = [])
+    {
+        $data['admin'] = 1;
+        $this->register($data);
+    }
+
+    /**
+     * Login an User using username and password with JWT
      * 
      * @param array $data
      * @return void
      */
     public function login($data = [])
     {
-        $example = $this->model('Example')->getBy('headerRef', $data['headerRef']);
+        $user = Validator::email($data['login']) === true
+            ? $this->model('User')->getBy('email', $data['login'])
+            : $this->model('User')->getBy('username', $data['login']);
 
-        if (!$example) {
-            Router::abort(404, json_encode([
+        if (!$user) {
+            Router::abort(404, [
                 'status' => 'error',
-                'message' => 'example not found'
-            ]));
+                'message' => 'User not found'
+            ]);
         }
 
-        Response::send([
-            'status' => 'success',
-            'data' => $example
-        ]);
-    }
-
-    /**
-     * Register new example using username and password with JWT
-     * 
-     * @param array $data
-     * @return void
-     */
-    public function registerJWT($data = [])
-    {
-        $example = $this->model('Example')->getBy('username', $data['username']);
-
-        if ($example) {
-            Router::abort(400, json_encode([
-                'status' => 'error',
-                'message' => 'example already exists'
-            ]));
-        }
-
-        // Hash password
-        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-
-        if (!$this->model('Example')->add($data)) {
-            Router::abort(500, json_encode([
-                'status' => 'error',
-                'message' => 'Server error'
-            ]));
-        }
-
-        unset($data['password']);
-
-        Response::send([
-            'status' => 'success',
-            'data' => $data
-        ]);
-    }
-
-    /**
-     * Login an example using username and password with JWT
-     * 
-     * @param array $data
-     * @return void
-     */
-    public function loginJWT($data = [])
-    {
-        $example = $this->model('Example')->getBy('username', $data['username']);
-
-        if (!$example) {
-            Router::abort(404, json_encode([
-                'status' => 'error',
-                'message' => 'example not found'
-            ]));
-        }
-
-        if (!password_verify($data['password'], $example->password)) {
-            Router::abort(401, json_encode([
+        if (!password_verify($data['password'], $user->password)) {
+            Router::abort(401, [
                 'status' => 'error',
                 'message' => 'Invalid password'
-            ]));
+            ]);
         }
 
         $secret_key = $_ENV['JWT_SECRET_KEY'];
@@ -140,25 +128,24 @@ class Auth extends Controller
         $audience_claim = $_ENV['CLIENT_ADDRESS'];
         $issuedat_claim = time(); // issued at
         // $notbefore_claim = $issuedat_claim + 10; //not before in seconds
-        $expire_claim = $issuedat_claim + 600; // expire time in seconds (10 minutes)
+        $expire_claim = $issuedat_claim + 86400; // expire time in seconds (24 hours from now)
         $payload = array(
             "iss" => $issuer_claim,
             "aud" => $audience_claim,
             "iat" => $issuedat_claim,
             // "nbf" => $notbefore_claim,
             "exp" => $expire_claim,
-            "sub" => $example->username
+            "sub" => $user->username
         );
 
         $jwt = JWT::encode($payload, $secret_key, "HS256");
 
         // Set expirable cookie for JWT
-        setcookie('jwt', $jwt, $expire_claim, "/", $_ENV['SERVER_ADDRESS'], false, true);
+        setcookie('jwt', $jwt, $expire_claim, "/", $_ENV['CLIENT_ADDRESS'], false, true);
 
-        Response::code();
         Response::send(
             array(
-                "message" => "Successful login.",
+                "message" => "Logged in successfully!",
                 "jwt" => $jwt
             )
         );
