@@ -52,10 +52,10 @@ CREATE TABLE IF NOT EXISTS `nodes` (
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 CREATE TABLE IF NOT EXISTS `resources` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `title` varchar(255) NOT NULL,
+    `title` varchar(255) NOT NULL UNIQUE,
     `description` text NOT NULL,
     `link` varchar(255) NOT NULL,
-    `visited` boolean NOT NULL,
+    `visited` boolean NOT NULL DEFAULT 0,
     `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
