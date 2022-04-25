@@ -282,7 +282,8 @@ As I'm the only one working on the project it's a given that I'll be responsible
 - [x] Wireframes
 - [x] Designs
 - [ ] Back-end -  API Development
-  - [ ] Roadmap + Resources endpoint
+  - [ ] Roadmaps endpoint
+  - [ ] Resources endpoint
   - [ ] Interview Questions endpoint
   - [ ] Auth endpoint
 - [ ] Front-end -  UI Development
