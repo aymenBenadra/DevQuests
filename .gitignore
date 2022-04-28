@@ -3,3 +3,5 @@ vendor/
 .idea/
 .vscode/
 public/identicons
+report.txt
+report.csv
