@@ -31,7 +31,10 @@ CREATE TABLE IF NOT EXISTS `modules` (
     `title` varchar(255) NOT NULL,
     `description` text NOT NULL,
     `weeks` int NOT NULL,
-    PRIMARY KEY (`id`)
+    `roadmap_id` int NOT NULL,
+    `order` int NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`roadmap_id`) REFERENCES `roadmaps`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 CREATE TABLE IF NOT EXISTS `nodes` (
     `id` int NOT NULL AUTO_INCREMENT,
@@ -40,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `nodes` (
     `order` int NOT NULL,
     `module_id` int NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`module_id`) REFERENCES `modules`(`id`)
+    FOREIGN KEY (`module_id`) REFERENCES `modules`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 CREATE TABLE IF NOT EXISTS `resources` (
     `id` int NOT NULL AUTO_INCREMENT,
@@ -52,27 +55,19 @@ CREATE TABLE IF NOT EXISTS `resources` (
     `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
-CREATE TABLE IF NOT EXISTS `roadmaps_modules` (
-    `roadmap_id` int NOT NULL,
-    `module_id` int NOT NULL,
-    `module_order` int NOT NULL,
-    PRIMARY KEY (`roadmap_id`, `module_id`),
-    FOREIGN KEY (`roadmap_id`) REFERENCES `roadmaps`(`id`),
-    FOREIGN KEY (`module_id`) REFERENCES `modules`(`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 CREATE TABLE IF NOT EXISTS `user_roadmaps` (
     `user_id` int NOT NULL,
     `roadmap_id` int NOT NULL,
     `is_relaxed` boolean NOT NULL DEFAULT 1,
+    `is_completed` boolean NOT NULL DEFAULT 0,
     PRIMARY KEY (`user_id`, `roadmap_id`),
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
-    FOREIGN KEY (`roadmap_id`) REFERENCES `roadmaps`(`id`)
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`roadmap_id`) REFERENCES `roadmaps`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
-CREATE TABLE IF NOT EXISTS `user_modules` (
+CREATE TABLE IF NOT EXISTS `completed_modules` (
     `user_id` int NOT NULL,
     `module_id` int NOT NULL,
-    `is_done` int NOT NULL DEFAULT 0,
     PRIMARY KEY (`user_id`, `module_id`),
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`),
-    FOREIGN KEY (`module_id`) REFERENCES `modules`(`id`)
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`module_id`) REFERENCES `modules`(`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
