@@ -19,7 +19,7 @@ class Node extends Model
             'id' => 'int',
             'title' => 'required|string',
             'description' => 'required|string',
-            'time' => 'required|int',
+            `order` => 'required|int',
             'module_id' => 'required|int',
         ]);
         $this->table = 'Nodes';
