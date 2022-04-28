@@ -2,9 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Models\User;
 use Core\{Controller, Router};
-use Core\Helpers\{Validator, Response};
-use Firebase\JWT\{JWT};
+use Core\Helpers\{Request, Validator, Response};
+use Firebase\JWT\{JWT, Key};
 use Jdenticon\Identicon;
 
 /**
@@ -93,7 +94,7 @@ class Auth extends Controller
      */
     public function registerAdmin($data = [])
     {
-        $data['admin'] = 1;
+        $data['is_admin'] = 1;
         $this->register($data);
     }
 
@@ -149,5 +150,19 @@ class Auth extends Controller
                 "jwt" => $jwt
             )
         );
+    }
+
+    /**
+     * Get current authenticated User
+     * 
+     * @return object
+     */
+    public static function user()
+    {
+        $jwt = Request::authorization();
+
+        $token = JWT::decode($jwt, new Key($_ENV['JWT_SECRET_KEY'], "HS256"));
+
+        return (new User)->getBy('username', $token->sub);
     }
 }
