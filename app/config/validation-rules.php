@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\{Example};
+use App\Models\{Module, User, Question, Node, Roadmap, Resource};
 
 /**
  * Validation Rules
@@ -30,8 +30,25 @@ use App\Models\{Example};
  * @author Mohammed-Aymen Benadra
  */
 
-$example = new Example();
+$resource = new Resource();
+$module = new Module();
+$user = new User();
+$question = new Question();
+$node = new Node();
+$roadmap = new Roadmap();
 
 return array_merge(
-    $example->getRequiredSchema()
+    $resource->getRequiredSchema(),
+    $module->getRequiredSchema(),
+    $user->getRequiredSchema(),
+    $question->getRequiredSchema(),
+    $node->getRequiredSchema(),
+    $roadmap->getRequiredSchema(),
+    [
+        'id' => 'required|int',
+        'login' => 'required|string',
+        'nodes' => 'required|array',
+        'modules' => 'required|array',
+        'user_id' => 'required|int',
+    ],
 );
