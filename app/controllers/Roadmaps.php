@@ -6,12 +6,12 @@ use Core\{Controller, Router};
 use Core\Helpers\Response;
 
 /**
- * Resources Controller
+ * Roadmaps Controller
  *
  * @author Mohammed-Aymen Benadra
  * @package App\Controllers
  */
-class Resources extends Controller
+class Roadmaps extends Controller
 {
     private $model;
     /**
@@ -22,22 +22,22 @@ class Resources extends Controller
     public function __construct()
     {
         // Set default Model for this controller
-        $this->model = $this->model('Resource');
+        $this->model = $this->model('Roadmap');
 
         Response::headers();
         Response::code();
     }
 
     /**
-     * Get all resources
+     * Get all Roadmaps
      *
      * @return void
      */
     public function index()
     {
-        $resources = $this->model->getAll();
+        $roadmaps = $this->model->getAll();
 
-        if ($resources === false) {
+        if ($roadmaps === false) {
             Router::abort(500, [
                 'status' => 'error',
                 'message' => 'Server error'
@@ -46,47 +46,88 @@ class Resources extends Controller
 
         Response::send([
             'status' => 'success',
-            'data' => $resources,
-            'count' => count($resources)
+            'data' => $roadmaps,
+            'count' => count($roadmaps)
         ]);
     }
 
     /**
-     * Get a resource
+     * Get all Modules for a roadmap
+     * 
+     * @param int $data
+     * @return array
+     */
+    public function getModules($data = [])
+    {
+        // check if Roadmap exists
+        if ($this->model->get($data['id']) === false) {
+            Router::abort(404, [
+                'status' => 'error',
+                'message' => 'Roadmap not found'
+            ]);
+        }
+
+        $modules = $this->model->modules($data['id']);
+
+        if ($modules === false) {
+            Router::abort(500, [
+                'status' => 'error',
+                'message' => 'Server error'
+            ]);
+        }
+
+        Response::send([
+            'status' => 'success',
+            'data' => $modules,
+            'count' => count($modules)
+        ]);
+    }
+
+    /**
+     * Get a Roadmap with its modules
      *
      * @param array $data
      * @return void
      */
     public function show($data = [])
     {
-        $resource = $this->model->get($data['id']);
+        $roadmap = $this->model->get($data['id']);
 
-        if ($resource === false) {
+        if ($roadmap === false) {
             Router::abort(404, [
                 'status' => 'error',
-                'message' => 'Resource not found'
+                'message' => 'Roadmap not found'
             ]);
+        }
+
+        $roadmap->modules = $this->model->modules($data['id']) ?? [];
+
+        if (count($roadmap->modules) > 0) {
+            // get module nodes for each module
+            foreach ($roadmap->modules as $i => $module) {
+                $roadmap->modules[$i]->nodes = $this->model('Module')->nodes($module->id);
+            }
         }
 
         Response::send([
             'status' => 'success',
-            'data' => $resource
+            'data' => $roadmap
         ]);
     }
 
     /**
-     * Store a resource
+     * Store a Roadmap
      *
      * @param array $data
      * @return void
      */
     public function store($data = [])
     {
-        // check if the resource already exists
+        // check if the Roadmap already exists
         if ($this->model->getBy('title', $data['title']) !== false) {
             Router::abort(409, [
                 'status' => 'error',
-                'message' => 'resource already exists'
+                'message' => 'Roadmap already exists'
             ]);
         }
 
@@ -95,6 +136,14 @@ class Resources extends Controller
                 'status' => 'error',
                 'message' => 'Server error'
             ]);
+        }
+
+        // Add Modules to created Roadmap
+        if (isset($data['modules'])) {
+            foreach ($data['modules'] as $module) {
+                $module['roadmap_id'] = $this->model->getLastInsertedId();
+                $this->model('Module')->add($module);
+            }
         }
 
         Response::code(201);
@@ -107,7 +156,7 @@ class Resources extends Controller
     }
 
     /**
-     * Update an resource
+     * Update a Roadmap
      *
      * @param array $data
      * @return void
@@ -117,18 +166,18 @@ class Resources extends Controller
         $id = $data['id'];
         unset($data['id']);
 
-        // check if resource exists
+        // check if Roadmap exists
         if (!$this->model->get($id)) {
             Router::abort(404, [
                 'status' => 'error',
-                'message' => 'Resource not found'
+                'message' => 'Roadmap not found'
             ]);
         }
 
-        // Check if resource title already exists
-        $resource = $this->model->getBy('title', $data['title']);
+        // Check if Roadmap title already exists
+        $Roadmap = $this->model->getBy('title', $data['title']);
 
-        if ($resource !== false && $resource->id !== $id) {
+        if ($Roadmap !== false && $Roadmap->id !== $id) {
             Router::abort(409, [
                 'status' => 'error',
                 'message' => 'Title already taken'
@@ -149,26 +198,26 @@ class Resources extends Controller
     }
 
     /**
-     * Toggle visited status
+     * Toggle done status
      * 
      * @param array $data
      * @return void
      */
-    public function toggleVisited($data = [])
+    public function toggleDone($data = [])
     {
-        // check if resource exists
-        $resource = $this->model->get($data['id']);
+        // check if Roadmap exists
+        $Roadmap = $this->model->get($data['id']);
 
-        if (!$resource) {
+        if (!$Roadmap) {
             Router::abort(404, [
                 'status' => 'error',
-                'message' => 'Resource not found'
+                'message' => 'Roadmap not found'
             ]);
         }
 
-        $resource->is_visited = !$resource->is_visited;
+        $Roadmap->done = !$Roadmap->done;
 
-        if (!$this->model->update($data['id'], ['is_visited' => $resource->is_visited])) {
+        if (!$this->model->update($data['id'], ['done' => $Roadmap->done])) {
             Router::abort(500, [
                 'status' => 'error',
                 'message' => 'Server error'
@@ -177,23 +226,23 @@ class Resources extends Controller
 
         Response::send([
             'status' => 'Toggled successfully.',
-            'data' => $resource
+            'data' => $Roadmap
         ]);
     }
 
     /**
-     * Delete a resource
+     * Delete a Roadmap
      *
      * @param array $data
      * @return void
      */
     public function destroy($data = [])
     {
-        // check if resource exists
+        // check if Roadmap exists
         if (!$this->model->get($data['id'])) {
             Router::abort(404, [
                 'status' => 'error',
-                'message' => 'Resource not found'
+                'message' => 'Roadmap not found'
             ]);
         }
 

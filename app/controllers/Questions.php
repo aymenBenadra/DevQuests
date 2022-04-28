@@ -6,12 +6,12 @@ use Core\{Controller, Router};
 use Core\Helpers\Response;
 
 /**
- * Resources Controller
+ * Questions Controller
  *
  * @author Mohammed-Aymen Benadra
  * @package App\Controllers
  */
-class Resources extends Controller
+class Questions extends Controller
 {
     private $model;
     /**
@@ -22,22 +22,22 @@ class Resources extends Controller
     public function __construct()
     {
         // Set default Model for this controller
-        $this->model = $this->model('Resource');
+        $this->model = $this->model('Question');
 
         Response::headers();
         Response::code();
     }
 
     /**
-     * Get all resources
+     * Get all Questions
      *
      * @return void
      */
     public function index()
     {
-        $resources = $this->model->getAll();
+        $questions = $this->model->getAll();
 
-        if ($resources === false) {
+        if ($questions === false) {
             Router::abort(500, [
                 'status' => 'error',
                 'message' => 'Server error'
@@ -46,47 +46,47 @@ class Resources extends Controller
 
         Response::send([
             'status' => 'success',
-            'data' => $resources,
-            'count' => count($resources)
+            'data' => $questions,
+            'count' => count($questions)
         ]);
     }
 
     /**
-     * Get a resource
+     * Get a question
      *
      * @param array $data
      * @return void
      */
     public function show($data = [])
     {
-        $resource = $this->model->get($data['id']);
+        $question = $this->model->get($data['id']);
 
-        if ($resource === false) {
+        if ($question === false) {
             Router::abort(404, [
                 'status' => 'error',
-                'message' => 'Resource not found'
+                'message' => 'Question not found'
             ]);
         }
 
         Response::send([
             'status' => 'success',
-            'data' => $resource
+            'data' => $question
         ]);
     }
 
     /**
-     * Store a resource
+     * Store a question
      *
      * @param array $data
      * @return void
      */
     public function store($data = [])
     {
-        // check if the resource already exists
-        if ($this->model->getBy('title', $data['title']) !== false) {
+        // check if the question already exists
+        if ($this->model->getBy('question', $data['question']) !== false) {
             Router::abort(409, [
                 'status' => 'error',
-                'message' => 'resource already exists'
+                'message' => 'Question already exists'
             ]);
         }
 
@@ -107,7 +107,7 @@ class Resources extends Controller
     }
 
     /**
-     * Update an resource
+     * Update an question
      *
      * @param array $data
      * @return void
@@ -117,21 +117,21 @@ class Resources extends Controller
         $id = $data['id'];
         unset($data['id']);
 
-        // check if resource exists
+        // check if question exists
         if (!$this->model->get($id)) {
             Router::abort(404, [
                 'status' => 'error',
-                'message' => 'Resource not found'
+                'message' => 'Question not found'
             ]);
         }
 
-        // Check if resource title already exists
-        $resource = $this->model->getBy('title', $data['title']);
+        // Check if question question already exists
+        $question = $this->model->getBy('question', $data['question']);
 
-        if ($resource !== false && $resource->id !== $id) {
+        if ($question !== false && $question->id !== $id) {
             Router::abort(409, [
                 'status' => 'error',
-                'message' => 'Title already taken'
+                'message' => 'Question already taken'
             ]);
         }
 
@@ -149,51 +149,18 @@ class Resources extends Controller
     }
 
     /**
-     * Toggle visited status
-     * 
-     * @param array $data
-     * @return void
-     */
-    public function toggleVisited($data = [])
-    {
-        // check if resource exists
-        $resource = $this->model->get($data['id']);
-
-        if (!$resource) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Resource not found'
-            ]);
-        }
-
-        $resource->is_visited = !$resource->is_visited;
-
-        if (!$this->model->update($data['id'], ['is_visited' => $resource->is_visited])) {
-            Router::abort(500, [
-                'status' => 'error',
-                'message' => 'Server error'
-            ]);
-        }
-
-        Response::send([
-            'status' => 'Toggled successfully.',
-            'data' => $resource
-        ]);
-    }
-
-    /**
-     * Delete a resource
+     * Delete a question
      *
      * @param array $data
      * @return void
      */
     public function destroy($data = [])
     {
-        // check if resource exists
+        // check if question exists
         if (!$this->model->get($data['id'])) {
             Router::abort(404, [
                 'status' => 'error',
-                'message' => 'Resource not found'
+                'message' => 'Question not found'
             ]);
         }
 
