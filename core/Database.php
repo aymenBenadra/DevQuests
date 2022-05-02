@@ -103,7 +103,7 @@ class Database
     /**
      * Get all records as array of objects
      *
-     * @return void
+     * @return array
      */
     public function resultSet()
     {
@@ -114,7 +114,7 @@ class Database
     /**
      * Get single record as object
      *
-     * @return void
+     * @return object
      */
     public function single()
     {
@@ -125,7 +125,7 @@ class Database
     /**
      * Get number of records
      *
-     * @return void
+     * @return int
      */
     public function rowCount()
     {
@@ -136,7 +136,7 @@ class Database
     /**
      * Get last inserted id
      *
-     * @return void
+     * @return int
      */
     public function lastInsertedId()
     {
@@ -146,7 +146,7 @@ class Database
     /**
      * Get error
      *
-     * @return void
+     * @return array
      */
     public function getError()
     {
