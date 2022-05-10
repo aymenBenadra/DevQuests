@@ -67,7 +67,7 @@ class Roadmaps extends Controller
             ]);
         }
 
-        $modules = $this->model->modules($data['id']);
+        $modules = $this->model('Module')->getAllBy("roadmap_id", $data['id']);
 
         if ($modules === false) {
             Router::abort(500, [
@@ -100,12 +100,11 @@ class Roadmaps extends Controller
             ]);
         }
 
-        $roadmap->modules = $this->model->modules($data['id']) ?? [];
+        $roadmap->modules = $this->model('Module')->getAllBy("roadmap_id", $data['id']);
 
-        if (count($roadmap->modules) > 0) {
-            // get module nodes for each module
-            foreach ($roadmap->modules as $i => $module) {
-                $roadmap->modules[$i]->nodes = $this->model('Module')->nodes($module->id);
+        if (!empty($roadmap->modules)) {
+            foreach ($roadmap->modules as $key => $module) {
+                $roadmap->modules[$key]->nodes = $this->model('Node')->getAllBy("module_id", $module->id);
             }
         }
 
@@ -131,6 +130,9 @@ class Roadmaps extends Controller
             ]);
         }
 
+        $modules = $data['modules'] ?? [];
+        unset($data['modules']);
+
         if (!$this->model->add($data)) {
             Router::abort(500, [
                 'status' => 'error',
@@ -138,86 +140,108 @@ class Roadmaps extends Controller
             ]);
         }
 
+        // Get the Roadmap just created
+        $roadmap = $this->model->getBy('title', $data['title']);
+
         // Add Modules to created Roadmap
-        if (isset($data['modules'])) {
-            foreach ($data['modules'] as $module) {
-                $module['roadmap_id'] = $this->model->getLastInsertedId();
-                $this->model('Module')->add($module);
+        if (!empty($modules)) {
+            foreach ($modules as $order => $module) {
+                // Get module id from title
+                $module['roadmap_id'] = $roadmap->id;
+                $module['order'] = $order;
+
+                $nodes = $module['nodes'] ?? [];
+                unset($module['nodes']);
+
+                if (!$this->model('Module')->add($module)) {
+                    $this->model->delete($roadmap->id);
+                    Router::abort(500, [
+                        'status' => 'error',
+                        'message' => 'Server error: Module ' . $module['title'] . ' not added'
+                    ]);
+                }
+
+                // Get the Module just created
+                $module_id = $this->model->getLastInsertedId();
+
+                // Add Nodes to created Module
+                if (!empty($nodes)) {
+                    if (!$this->model('Node')->addMultiple($module_id, $nodes)) {
+                        $this->model->delete($roadmap->id);
+                        Router::abort(500, [
+                            'status' => 'error',
+                            'message' => 'Server error: Module ' . $module['title'] . ' Nodes not added'
+                        ]);
+                    }
+                }
             }
         }
 
         Response::code(201);
         Response::send([
-            'status' => 'Created successfully.',
-            'data' => $this->model->get(
-                $this->model->getLastInsertedId()
-            )
+            'status' => 'Created successfully.'
         ]);
     }
 
     /**
-     * Update a Roadmap
-     *
-     * @param array $data
-     * @return void
-     */
-    public function update($data = [])
-    {
-        $id = $data['id'];
-        unset($data['id']);
-
-        // check if Roadmap exists
-        if (!$this->model->get($id)) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Roadmap not found'
-            ]);
-        }
-
-        // Check if Roadmap title already exists
-        $Roadmap = $this->model->getBy('title', $data['title']);
-
-        if ($Roadmap !== false && $Roadmap->id !== $id) {
-            Router::abort(409, [
-                'status' => 'error',
-                'message' => 'Title already taken'
-            ]);
-        }
-
-        if (!$this->model->update($id, $data)) {
-            Router::abort(500, [
-                'status' => 'error',
-                'message' => 'Server error'
-            ]);
-        }
-
-        Response::send([
-            'status' => 'Updated successfully.',
-            'data' => $this->model->get($id)
-        ]);
-    }
-
-    /**
-     * Toggle done status
+     * Toggle completed status
      * 
      * @param array $data
      * @return void
      */
-    public function toggleDone($data = [])
+    public function toggleCompleted($data = [])
     {
         // check if Roadmap exists
-        $Roadmap = $this->model->get($data['id']);
-
-        if (!$Roadmap) {
+        if (!$this->model->get($data['id'])) {
             Router::abort(404, [
                 'status' => 'error',
                 'message' => 'Roadmap not found'
             ]);
         }
 
-        $Roadmap->done = !$Roadmap->done;
+        // get user id from token username
+        $user_id = Auth::user()->id;
 
-        if (!$this->model->update($data['id'], ['done' => $Roadmap->done])) {
+        if ($this->model->isCompleted($user_id, $data['id'])) {
+            if ($this->model->uncomplete($user_id, $data['id']) === false) {
+                Router::abort(500, [
+                    'status' => 'error',
+                    'message' => 'Server error'
+                ]);
+            }
+        } else {
+            if ($this->model->complete($user_id, $data['id']) === false) {
+                Router::abort(500, [
+                    'status' => 'error',
+                    'message' => 'Server error'
+                ]);
+            }
+        }
+
+        Response::send([
+            'status' => 'Toggled successfully.'
+        ]);
+    }
+
+    /**
+     * Get all Roadmaps for a user
+     * 
+     * @param array $data
+     * @return void
+     */
+    public function getUserRoadmaps($data = [])
+    {
+        // check if user exists
+        if (!$this->model('User')->get($data['id'])) {
+            Router::abort(404, [
+                'status' => 'error',
+                'message' => 'User not found'
+            ]);
+        }
+
+        $roadmaps = $this->model->getAllBy("user_id", $data['id']);
+
+        if ($roadmaps === false) {
             Router::abort(500, [
                 'status' => 'error',
                 'message' => 'Server error'
@@ -225,8 +249,83 @@ class Roadmaps extends Controller
         }
 
         Response::send([
-            'status' => 'Toggled successfully.',
-            'data' => $Roadmap
+            'status' => 'success',
+            'data' => $roadmaps,
+            'count' => count($roadmaps)
+        ]);
+    }
+
+    /**
+     * Get Roadmap status for the logged in user
+     * 
+     * @param array $data
+     * @return void
+     */
+    public function status($data = [])
+    {
+        // check if Roadmap exists
+        if (!$this->model->get($data['id'])) {
+            Router::abort(404, [
+                'status' => 'error',
+                'message' => 'Roadmap not found'
+            ]);
+        }
+
+        // get user id from token username
+        $user_id = Auth::user()->id;
+        $roadmap = $this->model->get($data['id']);
+
+        $status['title'] = $roadmap->title;
+        $status['description'] = $roadmap->description;
+        $status['started'] = $this->model->isStarted($user_id, $data['id']);
+        $status['relaxed'] = $this->model->isRelaxed($user_id, $data['id']);
+        $status['completed'] = $this->model->isCompleted($user_id, $data['id']);
+        $status['completed_modules'] = $this->model('Module')->completed($data['id']);
+        $status['uncompleted_modules'] = $this->model('Module')->uncompleted($data['id']);
+
+        Response::send([
+            'status' => 'Retrieved successfully.',
+            'data' => $status
+        ]);
+    }
+
+    /**
+     * Toggle Roadmap relaxed status
+     * 
+     * @param array $data
+     * @return void
+     */
+    public function toggleRelaxed($data = [])
+    {
+        // check if Roadmap exists
+        if (!$this->model->get($data['id'])) {
+            Router::abort(404, [
+                'status' => 'error',
+                'message' => 'Roadmap not found'
+            ]);
+        }
+
+        // get user id from token username
+        $user_id = Auth::user()->id;
+
+        if ($this->model->isRelaxed($user_id, $data['id'])) {
+            if ($this->model->unrelax($user_id, $data['id']) === false) {
+                Router::abort(500, [
+                    'status' => 'error',
+                    'message' => 'Server error'
+                ]);
+            }
+        } else {
+            if ($this->model->relax($user_id, $data['id']) === false) {
+                Router::abort(500, [
+                    'status' => 'error',
+                    'message' => 'Server error'
+                ]);
+            }
+        }
+
+        Response::send([
+            'status' => 'Toggled successfully.'
         ]);
     }
 
