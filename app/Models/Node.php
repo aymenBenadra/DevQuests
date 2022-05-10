@@ -24,4 +24,25 @@ class Node extends Model
         ]);
         $this->table = 'Nodes';
     }
+
+    /**
+     * Add multiple nodes
+     * 
+     * @param int $module_id
+     * @param array $nodes
+     * @return bool
+     */
+    public function addMultiple($module_id, $nodes)
+    {
+        foreach ($nodes as $order => $node) {
+            $node['module_id'] = $module_id;
+            $node['order'] = $order;
+
+            if (!$this->add($node)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

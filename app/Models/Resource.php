@@ -16,8 +16,8 @@ class Resource extends Model
     public function __construct()
     {
         parent::__construct([
-            'id' => 'int',
-            'title' => 'required|string',
+            'resource_id' => 'required|int|exists:Resource',
+            'title' => 'required|string|unique:Resource,title',
             'description' => 'required|string',
             'link' => 'required|string',
             'is_visited' => 'bool',

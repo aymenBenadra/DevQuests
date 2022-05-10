@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Controllers\Auth;
 use Core\Model;
 
 /**
@@ -26,73 +27,183 @@ class Roadmap extends Model
     }
 
     /**
-     * Get all modules of a roadmap
+     * Get all roadmaps and completed status
      * 
-     * @param int $roadmap_id
      * @return array
      */
-    public function modules(int $roadmap_id)
+    public function getAll()
     {
-        $this->db->query("SELECT m.*, rm.module_order FROM `roadmaps_modules` as rm
-            INNER JOIN `modules` as m ON m.id = rm.module_id
-            WHERE rm.roadmap_id = :roadmap_id
-            ORDER BY `module_order` ASC");
-        $this->db->bind(':roadmap_id', $roadmap_id);
+        $roadmaps = parent::getAll();
 
-        return $this->db->resultSet();
+        if ($roadmaps === false) {
+            return false;
+        }
+
+        $user_id = Auth::user()->id;
+
+        foreach ($roadmaps as $key => $roadmap) {
+            $roadmaps[$key]->started = $this->isStarted($user_id, $roadmap->id);
+            $roadmaps[$key]->completed = $this->isCompleted($user_id, $roadmap->id);
+            $roadmaps[$key]->relaxed = $this->isRelaxed($user_id, $roadmap->id);
+        }
+
+        return $roadmaps;
     }
 
     /**
-     * Add a module to a roadmap
+     * Get a roadmap with completed status
      * 
+     * @param int $id
+     * @return object
+     */
+    public function get($id)
+    {
+        $roadmap = parent::get($id);
+
+        if ($roadmap === false) {
+            return false;
+        }
+
+        $roadmap->started = $this->isStarted(Auth::user()->id, $roadmap->id);
+        $roadmap->completed = $this->isCompleted(Auth::user()->id, $roadmap->id);
+        $roadmap->relaxed = $this->isRelaxed(Auth::user()->id, $roadmap->id);
+
+        return $roadmap;
+    }
+
+    /**
+     * Get a roadmap by a field and completed status
+     * 
+     * @param string $field
+     * @param string $value
+     * @return object
+     */
+    public function getBy($field, $value)
+    {
+        $roadmap = parent::getBy($field, $value);
+
+        if ($roadmap === false) {
+            return false;
+        }
+
+        $roadmap->started = $this->isStarted(Auth::user()->id, $roadmap->id);
+        $roadmap->completed = $this->isCompleted(Auth::user()->id, $roadmap->id);
+        $roadmap->relaxed = $this->isRelaxed(Auth::user()->id, $roadmap->id);
+
+        return $roadmap;
+    }
+
+    /**
+     * Get all roadmaps by a field and completed status
+     * 
+     * @param string $field
+     * @param string $value
+     * @return array
+     */
+    public function getAllBy($field, $value)
+    {
+        $roadmaps = parent::getAllBy($field, $value);
+
+        if ($roadmaps === false) {
+            return false;
+        }
+
+        foreach ($roadmaps as $key => $roadmap) {
+            $roadmaps[$key]->started = $this->isStarted(Auth::user()->id, $roadmap->id);
+            $roadmaps[$key]->completed = $this->isCompleted(Auth::user()->id, $roadmap->id);
+            $roadmaps[$key]->relaxed = $this->isRelaxed(Auth::user()->id, $roadmap->id);
+        }
+
+        return $roadmaps;
+    }
+
+    /**
+     * Check if a user has started a roadmap
+     *  
+     * @param int $user_id
      * @param int $roadmap_id
-     * @param int $module_id
-     * @param int $module_order
      * @return bool
      */
-    public function addModule(int $roadmap_id, int $module_id, int $module_order)
+    public function isStarted(int $user_id, int $roadmap_id)
     {
-        $this->db->query("INSERT INTO `roadmaps_modules` (`roadmap_id`, `module_id`, `module_order`)
-            VALUES (:roadmap_id, :module_id, :module_order)");
+        $this->db->query("SELECT * FROM `user_roadmaps`
+            WHERE roadmap_id = :roadmap_id
+            AND user_id = :user_id");
         $this->db->bind(':roadmap_id', $roadmap_id);
-        $this->db->bind(':module_id', $module_id);
-        $this->db->bind(':module_order', $module_order);
+        $this->db->bind(':user_id', $user_id);
+
+        return $this->db->rowCount() > 0;
+    }
+
+    /**
+     * Start a roadmap
+     * 
+     * @param int $user_id
+     * @param int $roadmap_id
+     * @return bool
+     */
+    public function start($user_id, $roadmap_id)
+    {
+        $this->db->query("INSERT INTO `user_roadmaps` (`user_id`, `roadmap_id`)
+            VALUES (:user_id, :roadmap_id)");
+        $this->db->bind(':user_id', $user_id);
+        $this->db->bind(':roadmap_id', $roadmap_id);
 
         return $this->db->execute();
     }
 
     /**
-     * Remove a module from a roadmap
+     * Check if Roadmap is relaxed for a user
      * 
+     * @param int $user_id
      * @param int $roadmap_id
-     * @param int $module_id
      * @return bool
      */
-    public function removeModule(int $roadmap_id, int $module_id)
+    public function isRelaxed(int $user_id, int $roadmap_id)
     {
-        $this->db->query("DELETE FROM `roadmaps_modules` WHERE `roadmap_id` = :roadmap_id AND `module_id` = :module_id");
+        $this->db->query("SELECT is_relaxed FROM `user_roadmaps`
+            WHERE `user_id` = :user_id
+            AND `roadmap_id` = :roadmap_id");
+        $this->db->bind(':user_id', $user_id);
         $this->db->bind(':roadmap_id', $roadmap_id);
-        $this->db->bind(':module_id', $module_id);
+
+        return (bool)($this->db->single()->is_relaxed ?? false);
+    }
+
+    /**
+     * Mark a roadmap as relaxed
+     * 
+     * @param int $user_id
+     * @param int $roadmap_id
+     * @return bool
+     */
+    public function relax($user_id, $roadmap_id)
+    {
+        $this->db->query("UPDATE `user_roadmaps`
+            SET `is_relaxed` = 1
+            WHERE `user_id` = :user_id
+            AND `roadmap_id` = :roadmap_id");
+        $this->db->bind(':user_id', $user_id);
+        $this->db->bind(':roadmap_id', $roadmap_id);
 
         return $this->db->execute();
     }
 
     /**
-     * Update a module order in a roadmap
+     * Mark a roadmap as not relaxed
      * 
+     * @param int $user_id
      * @param int $roadmap_id
-     * @param int $module_id
-     * @param int $module_order
      * @return bool
      */
-    public function updateModuleOrder(int $roadmap_id, int $module_id, int $module_order)
+    public function unrelax($user_id, $roadmap_id)
     {
-        $this->db->query("UPDATE `roadmaps_modules` SET `module_order` = :module_order 
-            WHERE `roadmap_id` = :roadmap_id 
-            AND `module_id` = :module_id");
+        $this->db->query("UPDATE `user_roadmaps`
+            SET `is_relaxed` = 0
+            WHERE `user_id` = :user_id
+            AND `roadmap_id` = :roadmap_id");
+        $this->db->bind(':user_id', $user_id);
         $this->db->bind(':roadmap_id', $roadmap_id);
-        $this->db->bind(':module_id', $module_id);
-        $this->db->bind(':module_order', $module_order);
 
         return $this->db->execute();
     }
@@ -106,13 +217,13 @@ class Roadmap extends Model
      */
     public function isCompleted(int $user_id, int $roadmap_id)
     {
-        $this->db->query("SELECT * FROM `user_roadmaps`
+        $this->db->query("SELECT is_completed FROM `user_roadmaps`
             WHERE `user_id` = :user_id
             AND `roadmap_id` = :roadmap_id");
         $this->db->bind(':user_id', $user_id);
         $this->db->bind(':roadmap_id', $roadmap_id);
 
-        return $this->db->rowCount() > 0;
+        return (bool)($this->db->single()->is_completed ?? false);
     }
 
     /**
@@ -124,8 +235,10 @@ class Roadmap extends Model
      */
     public function complete(int $user_id, int $roadmap_id)
     {
-        $this->db->query("INSERT INTO `user_roadmaps` (`user_id`, `roadmap_id`)
-            VALUES (:user_id, :roadmap_id)");
+        $this->db->query("UPDATE `user_roadmaps`
+            SET `is_completed` = 1
+            WHERE `user_id` = :user_id
+            AND `roadmap_id` = :roadmap_id");
         $this->db->bind(':user_id', $user_id);
         $this->db->bind(':roadmap_id', $roadmap_id);
 
@@ -141,7 +254,8 @@ class Roadmap extends Model
      */
     public function uncomplete(int $user_id, int $roadmap_id)
     {
-        $this->db->query("DELETE FROM `user_roadmaps`
+        $this->db->query("UPDATE `user_roadmaps`
+            SET `is_completed` = 0
             WHERE `user_id` = :user_id
             AND `roadmap_id` = :roadmap_id");
         $this->db->bind(':user_id', $user_id);
