@@ -129,7 +129,7 @@ class Auth
             }
 
             // Check if user is authorized
-            if ($user->admin === 1 && $role === 'admin') {
+            if ($user->is_admin === 1 && $role === 'admin') {
                 return true;
             }
 
