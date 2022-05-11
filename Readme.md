@@ -1,4 +1,4 @@
-# $DevQuests$
+# DevQuests
 
 <!--
 '########::'########:'##::::'##::'#######::'##::::'##:'########::'######::'########::'######::
@@ -15,7 +15,7 @@ DevQuests is a simple, open-source, community-driven platform for developers to 
 
 ## TABLE OF CONTENT
 
-- [$DevQuests$](#devquests)
+- [DevQuests](#devquests)
   - [TABLE OF CONTENT](#table-of-content)
   - [OVERVIEW](#overview)
     - [Project Glossary](#project-glossary)
@@ -33,6 +33,7 @@ DevQuests is a simple, open-source, community-driven platform for developers to 
   - [TECHNOLOGICAL CHOICES](#technological-choices)
     - [Modelization](#modelization-1)
     - [Frontend](#frontend)
+    - [Backend](#backend)
     - [Database](#database)
     - [Tools](#tools)
       - [Modelization tool](#modelization-tool)
@@ -92,6 +93,7 @@ DevQuests follows the learning by doing method by offering Detailed Roadmaps\* w
   - [Login](#login)
   - [Signup](#signup)
   - [Logout](#logout)
+- [Roadmap](#roadmap)
 - [404](#404)
 
 ### Content types
@@ -138,8 +140,18 @@ DevQuests follows the learning by doing method by offering Detailed Roadmaps\* w
 ### Frontend
 
 - **Html 5**
-- **CSS 3** -> *TailwindCSS* -> *Daisy UI*
-- **Javascript ES6** -> *React.js* -> *React Router*
+- **CSS 3**
+  - **TailwindCSS**
+  - **Daisy UI**
+- **Javascript ES6**
+- **React.js**
+  - **React Router**
+  - **React Context**
+  - **React Query**
+
+### Backend
+
+- **PHP** -> [*SakamotoMVC*](https://github.com/aymenBenadra/SakamotoMVC)
 
 ### Database
 
@@ -166,10 +178,10 @@ DevQuests follows the learning by doing method by offering Detailed Roadmaps\* w
 
 #### Build Tools
 
-- **Vite** -> *Frontend*
-  - **Webpack** -> *Bundler*
-  - **Babel** -> *Transcompiler*
-  - **ESLint** -> *Linter*
+- **Vite** -> *Builder*
+- **Webpack** -> *Bundler*
+- **Babel** -> *Transcompiler*
+- **ESLint** -> *Linter*
 
 #### Git & Version Control
 
@@ -281,11 +293,11 @@ As I'm the only one working on the project it's a given that I'll be responsible
 - [x] Database
 - [x] Wireframes
 - [x] Designs
-- [ ] Back-end -  API Development
-  - [ ] Roadmaps endpoint
-  - [ ] Resources endpoint
-  - [ ] Interview Questions endpoint
-  - [ ] Auth endpoint
+- [x] Back-end -  API Development
+  - [x] Roadmaps endpoint
+  - [x] Resources endpoint
+  - [x] Interview Questions endpoint
+  - [x] Auth endpoint
 - [ ] Front-end -  UI Development
   - [ ] Homepage
   - [ ] Login/Signup
@@ -301,7 +313,7 @@ As I'm the only one working on the project it's a given that I'll be responsible
 | Wireframes    | 2 Days |
 | Designs       | 7 Days |
 | Back-end - API| 3 Days |
-| Front-end - UI| 5 Days |
+| Front-end - UI| 15 Days |
 | Release v1.0  | June 29th, 2022 |
 
 ## Conclusion & Perspectives
