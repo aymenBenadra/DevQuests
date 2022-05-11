@@ -25,6 +25,8 @@ use App\Models\{Module, User, Question, Node, Roadmap, Resource};
  * ? - - same: Check if the field matches with the parameter provided
  * ? - - matches: Check if the field matches with the parameter provided
  * ? - - ip: Check if the field is an ip address
+ * ? - - exists: Check if the field exists in the database
+ * ? - - unique: Check if the field is unique in the database
  * 
  * @package App\Config
  * @author Mohammed-Aymen Benadra
@@ -37,18 +39,20 @@ $question = new Question();
 $node = new Node();
 $roadmap = new Roadmap();
 
-return array_merge(
-    $resource->getRequiredSchema(),
-    $module->getRequiredSchema(),
-    $user->getRequiredSchema(),
-    $question->getRequiredSchema(),
-    $node->getRequiredSchema(),
-    $roadmap->getRequiredSchema(),
-    [
-        'id' => 'required|int',
+$rules = [
+    "resource" => $resource->getRequiredSchema(),
+    "module" => $module->getRequiredSchema(),
+    "user" => array_merge($user->getRequiredSchema(), [
         'login' => 'required|string',
-        'nodes' => 'required|array',
+    ]),
+    "question" => $question->getRequiredSchema(),
+    "node" => $node->getRequiredSchema(),
+    "roadmap" => array_merge($roadmap->getRequiredSchema(), [
         'modules' => 'required|array',
-        'user_id' => 'required|int',
-    ],
-);
+        'nodes' => 'required|array',
+    ])
+];
+
+$rules["all"] = $rules["resource"] + $rules["module"] + $rules["user"] + $rules["question"] + $rules["node"] + $rules["roadmap"];
+
+return $rules;
