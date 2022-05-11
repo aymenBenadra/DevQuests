@@ -36,7 +36,7 @@ class Validator
             if (method_exists(__CLASS__, $ruleName)) {
                 $result = $ruleParam
                     ? (is_array($ruleParam)
-                        ? self::$ruleName($value, ...$ruleParam)
+                        ? self::$ruleName($value, $ruleParam[0], $ruleParam[1])
                         : self::$ruleName($value, $ruleParam))
                     : self::$ruleName($value);
 
@@ -392,7 +392,7 @@ class Validator
         $model = "App\\Models\\$model";
         $model = new $model;
 
-        if (!$model->getBy($column, $value)) {
+        if ($model->getBy($column, $value)) {
             return 'The value is not unique';
         }
 

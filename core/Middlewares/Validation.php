@@ -35,7 +35,7 @@ class Validation
      * @param  string $fields
      * @return void
      */
-    public function handle(string $fields)
+    public function handle(string $fields, string $scope = 'all')
     {
         $fields = explode('|', $fields);
         $data = self::sanitize(Request::data());
@@ -43,8 +43,9 @@ class Validation
 
         // Get the rules to validate 
         foreach ($fields as $field) {
-            $rulesToValidate[$field] = $this->rules[$field];
+            $rulesToValidate[$field] = $this->rules[$scope][$field];
         }
+
 
         // if data fields count is not equal to the rules count, return false
         if (count($data) !== count($rulesToValidate)) {
