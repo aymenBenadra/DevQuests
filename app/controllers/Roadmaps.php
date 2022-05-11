@@ -59,14 +59,6 @@ class Roadmaps extends Controller
      */
     public function getModules($data = [])
     {
-        // check if Roadmap exists
-        if ($this->model->get($data['id']) === false) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Roadmap not found'
-            ]);
-        }
-
         $modules = $this->model('Module')->getAllBy("roadmap_id", $data['id']);
 
         if ($modules === false) {
@@ -92,14 +84,6 @@ class Roadmaps extends Controller
     public function show($data = [])
     {
         $roadmap = $this->model->get($data['id']);
-
-        if ($roadmap === false) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Roadmap not found'
-            ]);
-        }
-
         $roadmap->modules = $this->model('Module')->getAllBy("roadmap_id", $data['id']);
 
         if (!empty($roadmap->modules)) {
@@ -122,14 +106,6 @@ class Roadmaps extends Controller
      */
     public function store($data = [])
     {
-        // check if the Roadmap already exists
-        if ($this->model->getBy('title', $data['title']) !== false) {
-            Router::abort(409, [
-                'status' => 'error',
-                'message' => 'Roadmap already exists'
-            ]);
-        }
-
         $modules = $data['modules'] ?? [];
         unset($data['modules']);
 
@@ -191,14 +167,6 @@ class Roadmaps extends Controller
      */
     public function toggleCompleted($data = [])
     {
-        // check if Roadmap exists
-        if (!$this->model->get($data['id'])) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Roadmap not found'
-            ]);
-        }
-
         // get user id from token username
         $user_id = Auth::user()->id;
 
@@ -231,14 +199,6 @@ class Roadmaps extends Controller
      */
     public function getUserRoadmaps($data = [])
     {
-        // check if user exists
-        if (!$this->model('User')->get($data['id'])) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'User not found'
-            ]);
-        }
-
         $roadmaps = $this->model->getAllBy("user_id", $data['id']);
 
         if ($roadmaps === false) {
@@ -263,14 +223,6 @@ class Roadmaps extends Controller
      */
     public function status($data = [])
     {
-        // check if Roadmap exists
-        if (!$this->model->get($data['id'])) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Roadmap not found'
-            ]);
-        }
-
         // get user id from token username
         $user_id = Auth::user()->id;
         $roadmap = $this->model->get($data['id']);
@@ -297,14 +249,6 @@ class Roadmaps extends Controller
      */
     public function toggleRelaxed($data = [])
     {
-        // check if Roadmap exists
-        if (!$this->model->get($data['id'])) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Roadmap not found'
-            ]);
-        }
-
         // get user id from token username
         $user_id = Auth::user()->id;
 
@@ -337,14 +281,6 @@ class Roadmaps extends Controller
      */
     public function destroy($data = [])
     {
-        // check if Roadmap exists
-        if (!$this->model->get($data['id'])) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Roadmap not found'
-            ]);
-        }
-
         if (!$this->model->delete($data['id'])) {
             Router::abort(500, [
                 'status' => 'error',

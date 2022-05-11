@@ -61,13 +61,6 @@ class Users extends Controller
     {
         $resource = $this->model->get($data['id']);
 
-        if ($resource === false) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Resource not found'
-            ]);
-        }
-
         Response::send([
             'status' => 'success',
             'data' => $resource
@@ -84,24 +77,6 @@ class Users extends Controller
     {
         $id = $data['id'];
         unset($data['id']);
-
-        // check if resource exists
-        if (!$this->model->get($id)) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Resource not found'
-            ]);
-        }
-
-        // Check if resource title already exists
-        $resource = $this->model->getBy('title', $data['title']);
-
-        if ($resource !== false && $resource->id !== $id) {
-            Router::abort(409, [
-                'status' => 'error',
-                'message' => 'Title already taken'
-            ]);
-        }
 
         if (!$this->model->update($id, $data)) {
             Router::abort(500, [
@@ -123,14 +98,6 @@ class Users extends Controller
      */
     public function destroy($data = [])
     {
-        // check if resource exists
-        if (!$this->model->get($data['id'])) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Resource not found'
-            ]);
-        }
-
         if (!$this->model->delete($data['id'])) {
             Router::abort(500, [
                 'status' => 'error',

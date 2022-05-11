@@ -38,13 +38,6 @@ class Modules extends Controller
     {
         $module = $this->model->get($data['id']);
 
-        if ($module === false) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Module not found'
-            ]);
-        }
-
         Response::send([
             'status' => 'success',
             'data' => $module
@@ -62,14 +55,6 @@ class Modules extends Controller
         // get user id from token username
         $user_id = Auth::user()->id;
         $roadmap_id = $this->model->get($data['id'])->roadmap_id;
-
-        // check if module exists
-        if (!$this->model->get($data['id'])) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Module not found'
-            ]);
-        }
 
         // Mark Roadmap as started if not already started
         if (!$this->model('Roadmap')->isStarted($user_id, $roadmap_id)) {
@@ -113,14 +98,6 @@ class Modules extends Controller
      */
     public function destroy($data = [])
     {
-        // check if module exists
-        if (!$this->model->get($data['id'])) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Module not found'
-            ]);
-        }
-
         if (!$this->model->delete($data['id'])) {
             Router::abort(500, [
                 'status' => 'error',

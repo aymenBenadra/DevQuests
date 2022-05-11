@@ -61,13 +61,6 @@ class Questions extends Controller
     {
         $question = $this->model->get($data['id']);
 
-        if ($question === false) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Question not found'
-            ]);
-        }
-
         Response::send([
             'status' => 'success',
             'data' => $question
@@ -82,14 +75,6 @@ class Questions extends Controller
      */
     public function store($data = [])
     {
-        // check if the question already exists
-        if ($this->model->getBy('question', $data['question']) !== false) {
-            Router::abort(409, [
-                'status' => 'error',
-                'message' => 'Question already exists'
-            ]);
-        }
-
         if (!$this->model->add($data)) {
             Router::abort(500, [
                 'status' => 'error',
@@ -117,24 +102,6 @@ class Questions extends Controller
         $id = $data['id'];
         unset($data['id']);
 
-        // check if question exists
-        if (!$this->model->get($id)) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Question not found'
-            ]);
-        }
-
-        // Check if question question already exists
-        $question = $this->model->getBy('question', $data['question']);
-
-        if ($question !== false && $question->id !== $id) {
-            Router::abort(409, [
-                'status' => 'error',
-                'message' => 'Question already taken'
-            ]);
-        }
-
         if (!$this->model->update($id, $data)) {
             Router::abort(500, [
                 'status' => 'error',
@@ -156,14 +123,6 @@ class Questions extends Controller
      */
     public function destroy($data = [])
     {
-        // check if question exists
-        if (!$this->model->get($data['id'])) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'Question not found'
-            ]);
-        }
-
         if (!$this->model->delete($data['id'])) {
             Router::abort(500, [
                 'status' => 'error',
