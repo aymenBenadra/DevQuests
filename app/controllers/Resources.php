@@ -54,7 +54,7 @@ class Resources extends Controller
     {
         Response::send([
             'status' => 'success',
-            'data' => $this->model->get($data['resource_id'])
+            'data' => $this->model->get($data['id'])
         ]);
     }
 
@@ -87,8 +87,8 @@ class Resources extends Controller
      */
     public function update($data = [])
     {
-        $id = $data['resource_id'];
-        unset($data['resource_id']);
+        $id = $data['id'];
+        unset($data['id']);
 
         if (!$this->model->update($id, $data)) {
             Router::abort(500, [
@@ -103,34 +103,6 @@ class Resources extends Controller
     }
 
     /**
-     * Toggle visited status
-     * 
-     * @param array $data
-     * @return void
-     */
-    public function toggleVisited($data = [])
-    {
-        // check if resource exists
-        $resource = $this->model->get($data['resource_id']);
-
-        $resource->is_visited = !$resource->is_visited;
-
-        if (!$this->model->update($data['resource_id'], ['is_visited' => $resource->is_visited])) {
-            Router::abort(500, [
-                'status' => 'error',
-                'message' => 'Server error'
-            ]);
-        }
-
-        Response::send([
-            'status' => 'Toggled successfully.',
-            'data' => [
-                'visited' => $resource->is_visited
-            ]
-        ]);
-    }
-
-    /**
      * Delete a resource
      *
      * @param array $data
@@ -138,7 +110,7 @@ class Resources extends Controller
      */
     public function destroy($data = [])
     {
-        if (!$this->model->delete($data['resource_id'])) {
+        if (!$this->model->delete($data['id'])) {
             Router::abort(500, [
                 'status' => 'error',
                 'message' => 'Server error'
