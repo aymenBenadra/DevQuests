@@ -16,11 +16,11 @@ class Node extends Model
     public function __construct()
     {
         parent::__construct([
-            'id' => 'int',
+            'id' => 'required|int|exists:Node',
             'title' => 'required|string',
             'description' => 'required|string',
             `order` => 'required|int',
-            'module_id' => 'required|int',
+            'module_id' => 'required|int|exists:Module',
         ]);
         $this->table = 'Nodes';
     }

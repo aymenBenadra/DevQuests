@@ -16,7 +16,7 @@ class Question extends Model
     public function __construct()
     {
         parent::__construct([
-            'id' => 'int',
+            'id' => 'required|int|exists:Question',
             'question' => 'required|string',
             'answer' => 'required|string',
             'created_at' => 'datetime',

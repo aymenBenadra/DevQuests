@@ -17,8 +17,8 @@ class Roadmap extends Model
     public function __construct()
     {
         parent::__construct([
-            'id' => 'int',
-            'title' => 'required|string',
+            'id' => 'required|int|exists:Roadmap',
+            'title' => 'required|string|unique:Roadmap,title',
             'description' => 'required|string',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',

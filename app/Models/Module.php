@@ -17,11 +17,11 @@ class Module extends Model
     public function __construct()
     {
         parent::__construct([
-            'id' => 'int',
+            'id' => 'required|int|exists:Module',
             'title' => 'required|string',
             'description' => 'required|string',
             'weeks' => 'required|int',
-            'roadmap_id' => 'required|int',
+            'roadmap_id' => 'required|int|exists:Roadmap',
             'order' => 'required|int'
         ]);
         $this->table = 'Modules';

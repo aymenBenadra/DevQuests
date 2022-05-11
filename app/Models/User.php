@@ -16,9 +16,9 @@ class User extends Model
     public function __construct()
     {
         parent::__construct([
-            'id' => 'int',
+            'id' => 'required|int|exists:User',
             'avatar' => 'string', // Auto generated from Gravatar
-            'username' => 'required|string',
+            'username' => 'required|string|unique:User,username',
             'name' => 'required|string',
             'email' => 'required|email',
             'password' => 'required|string',
