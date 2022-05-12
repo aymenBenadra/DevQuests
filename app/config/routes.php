@@ -9,14 +9,14 @@ $router->post('login', 'Auth@login', ['Auth@guest', 'Validation@login|password@u
 $router->get('resources', 'Resources@index'); //*🚀
 $router->get('resource', 'Resources@show', ['Validation@id@resource']); //*🚀
 $router->post('resource', 'Resources@store', ['Auth@admin', 'Validation@title|description|link@resource']); //*🚀
-$router->post('resource/update', 'Resources@update', ['Auth@admin', 'Validation@id|title|description|link@resource']); //*🚀
+$router->post('resource/update', 'Resources@update', ['Auth@admin', 'Validation@id|description|link@resource']); //*🚀
 $router->post('resource/delete', 'Resources@destroy', ['Auth@admin', 'Validation@id@resource']); //*🚀
 
 // Interview Questions Routes
 $router->get('questions', 'Questions@index'); //*🚀
 $router->get('question', 'Questions@show', ['Validation@id@question']); //*🚀
 $router->post('question', 'Questions@store', ['Auth@admin', 'Validation@question|answer@question']); //*🚀
-$router->post('question/update', 'Questions@update', ['Auth@admin', 'Validation@id|question|answer@question']); //*🚀
+$router->post('question/update', 'Questions@update', ['Auth@admin', 'Validation@id|answer@question']); //*🚀
 $router->post('question/delete', 'Questions@destroy', ['Auth@admin', 'Validation@id@question']); //*🚀
 
 // Modules Routes
