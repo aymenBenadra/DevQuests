@@ -192,30 +192,6 @@ class Roadmaps extends Controller
     }
 
     /**
-     * Get all Roadmaps for a user
-     * 
-     * @param array $data
-     * @return void
-     */
-    public function getUserRoadmaps($data = [])
-    {
-        $roadmaps = $this->model->getAllBy("user_id", $data['id']);
-
-        if ($roadmaps === false) {
-            Router::abort(500, [
-                'status' => 'error',
-                'message' => 'Server error'
-            ]);
-        }
-
-        Response::send([
-            'status' => 'success',
-            'data' => $roadmaps,
-            'count' => count($roadmaps)
-        ]);
-    }
-
-    /**
      * Get Roadmap status for the logged in user
      * 
      * @param array $data
