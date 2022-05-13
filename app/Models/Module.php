@@ -40,8 +40,12 @@ class Module extends Model
             return false;
         }
 
-        foreach ($modules as $key => $module) {
-            $modules[$key]->completed = $this->isCompleted(Auth::user()->id, $module->id);
+        $user_id = Auth::user()?->id;
+
+        if ($user_id) {
+            foreach ($modules as $key => $module) {
+                $modules[$key]->completed = $this->isCompleted($user_id, $module->id);
+            }
         }
 
         return $modules;
@@ -61,8 +65,12 @@ class Module extends Model
             return false;
         }
 
-        $module->completed = $this->isCompleted(Auth::user()->id, $id);
-        $module->nodes = $this->nodes($id);
+        $user_id = Auth::user()?->id;
+
+        if ($user_id) {
+            $module->completed = $this->isCompleted($user_id, $id);
+            $module->nodes = $this->nodes($id);
+        }
 
         return $module;
     }
@@ -80,8 +88,12 @@ class Module extends Model
             return false;
         }
 
-        foreach ($modules as $key => $module) {
-            $modules[$key]->completed = $this->isCompleted(Auth::user()->id, $module->id);
+        $user_id = Auth::user()?->id;
+
+        if ($user_id) {
+            foreach ($modules as $key => $module) {
+                $modules[$key]->completed = $this->isCompleted($user_id, $module->id);
+            }
         }
 
         return $modules;
@@ -139,8 +151,12 @@ class Module extends Model
             return false;
         }
 
-        $module->completed = $this->isCompleted(Auth::user()->id, $module->id);
-        $module->nodes = $this->nodes($module->id);
+        $user_id = Auth::user()?->id;
+
+        if ($user_id) {
+            $module->completed = $this->isCompleted($user_id, $module->id);
+            $module->nodes = $this->nodes($module->id);
+        }
 
         return $module;
     }

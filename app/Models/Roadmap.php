@@ -39,12 +39,14 @@ class Roadmap extends Model
             return false;
         }
 
-        $user_id = Auth::user()->id;
+        $user_id = Auth::user()?->id;
 
-        foreach ($roadmaps as $key => $roadmap) {
-            $roadmaps[$key]->started = $this->isStarted($user_id, $roadmap->id);
-            $roadmaps[$key]->completed = $this->isCompleted($user_id, $roadmap->id);
-            $roadmaps[$key]->relaxed = $this->isRelaxed($user_id, $roadmap->id);
+        if ($user_id) {
+            foreach ($roadmaps as $key => $roadmap) {
+                $roadmaps[$key]->started = $this->isStarted(Auth::user()->id, $roadmap->id);
+                $roadmaps[$key]->completed = $this->isCompleted(Auth::user()->id, $roadmap->id);
+                $roadmaps[$key]->relaxed = $this->isRelaxed(Auth::user()->id, $roadmap->id);
+            }
         }
 
         return $roadmaps;
@@ -64,9 +66,13 @@ class Roadmap extends Model
             return false;
         }
 
-        $roadmap->started = $this->isStarted(Auth::user()->id, $roadmap->id);
-        $roadmap->completed = $this->isCompleted(Auth::user()->id, $roadmap->id);
-        $roadmap->relaxed = $this->isRelaxed(Auth::user()->id, $roadmap->id);
+        $user_id = Auth::user()?->id;
+
+        if ($user_id) {
+            $roadmap->started = $this->isStarted($user_id, $roadmap->id);
+            $roadmap->completed = $this->isCompleted($user_id, $roadmap->id);
+            $roadmap->relaxed = $this->isRelaxed($user_id, $roadmap->id);
+        }
 
         return $roadmap;
     }
@@ -85,10 +91,13 @@ class Roadmap extends Model
         if ($roadmap === false) {
             return false;
         }
+        $user_id = Auth::user()?->id;
 
-        $roadmap->started = $this->isStarted(Auth::user()->id, $roadmap->id);
-        $roadmap->completed = $this->isCompleted(Auth::user()->id, $roadmap->id);
-        $roadmap->relaxed = $this->isRelaxed(Auth::user()->id, $roadmap->id);
+        if ($user_id) {
+            $roadmap->started = $this->isStarted($user_id, $roadmap->id);
+            $roadmap->completed = $this->isCompleted($user_id, $roadmap->id);
+            $roadmap->relaxed = $this->isRelaxed($user_id, $roadmap->id);
+        }
 
         return $roadmap;
     }
@@ -108,10 +117,14 @@ class Roadmap extends Model
             return false;
         }
 
-        foreach ($roadmaps as $key => $roadmap) {
-            $roadmaps[$key]->started = $this->isStarted(Auth::user()->id, $roadmap->id);
-            $roadmaps[$key]->completed = $this->isCompleted(Auth::user()->id, $roadmap->id);
-            $roadmaps[$key]->relaxed = $this->isRelaxed(Auth::user()->id, $roadmap->id);
+        $user_id = Auth::user()?->id;
+
+        if ($user_id) {
+            foreach ($roadmaps as $key => $roadmap) {
+                $roadmaps[$key]->started = $this->isStarted(Auth::user()->id, $roadmap->id);
+                $roadmaps[$key]->completed = $this->isCompleted(Auth::user()->id, $roadmap->id);
+                $roadmaps[$key]->relaxed = $this->isRelaxed(Auth::user()->id, $roadmap->id);
+            }
         }
 
         return $roadmaps;
