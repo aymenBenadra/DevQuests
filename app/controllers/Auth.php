@@ -142,7 +142,7 @@ class Auth extends Controller
         $jwt = JWT::encode($payload, $secret_key, "HS256");
 
         // Set expirable cookie for JWT
-        setcookie('jwt', $jwt, $expire_claim, "/", $_ENV['CLIENT_ADDRESS'], false, true);
+        setcookie(name:'jwt', value:$jwt, expires_or_options:$expire_claim, httponly:true);
 
         Response::send(
             array(
@@ -160,6 +160,10 @@ class Auth extends Controller
     public static function user()
     {
         $jwt = Request::authorization();
+
+        if (!$jwt) {
+            return null;
+        }
 
         $token = JWT::decode($jwt, new Key($_ENV['JWT_SECRET_KEY'], "HS256"));
 
