@@ -62,11 +62,11 @@ DevQuests follows the learning by doing method by offering Detailed Roadmaps\* w
 
 ### Project Glossary
 
-- ***Roadmaps***: Career paths which the user can follow.
-- ***Modules***: Skills needed for a specific roadmap.
-- **Nodes**: Skills needed for a specific module.
-- ***Resources***: Ressources to learn a skill or a set of skills.
-- **Interview Questions**: Questions to help the user understand the modules.
+- **_Roadmaps_**: Career paths which the user can follow.
+- **_Modules_**: Skills needed for a specific roadmap.
+- **_Nodes_**: Skills needed for a specific module.
+- **_Resources_**: Ressources to learn a skill or a set of skills.
+- **_Interview Questions_**: Questions to help the user understand the modules.
 
 ## PROJECT TEAM
 
@@ -75,15 +75,17 @@ DevQuests follows the learning by doing method by offering Detailed Roadmaps\* w
 ## PHASES
 
 1. **Basic Roadmap web app**:
-   - Users can *browse* and *choose* a Roadmap.
-   - Users can *browse* and *select* a Module.
-   - Users can *browse* and *visit* a Resource.
+   - Users can _browse_ and _choose_ a Roadmap.
+   - Users can _browse_ and _select_ a Module.
+   - Users can _browse_ and _visit_ a Resource.
+   - Users can _answer_ an Interview Question.
 2. **Adding Content**:
-   1. Add *Roadmaps*.
-   2. Add *Resources* on each *Module*.
+   1. Add _Roadmaps_.
+   2. Add _Resources_ on each _Module_.
+   3. Add _Interview Questions_.
 3. **Adding Secondary Functionalities**:
-   1. Authentification with Github for saving progress.
-   2. Add Learning Mode for time tracking (Relaxed, Normal, Hardcore).
+   1. Authentification for saving progress.
+   2. Add Learning Mode for time tracking (Relaxed/Timed).
 
 ## CONTENT STRUCTURE
 
@@ -151,11 +153,11 @@ DevQuests follows the learning by doing method by offering Detailed Roadmaps\* w
 
 ### Backend
 
-- **PHP** -> [*SakamotoMVC*](https://github.com/aymenBenadra/SakamotoMVC)
+- **PHP** -> [_SakamotoMVC_](https://github.com/aymenBenadra/SakamotoMVC)
 
 ### Database
 
-- **SQL** -> *MySQL*
+- **SQL** -> _MySQL_
 
 ### Tools
 
@@ -173,19 +175,19 @@ DevQuests follows the learning by doing method by offering Detailed Roadmaps\* w
 
 #### Package Managers
 
-- **Yarn** -> *Frontend*
-- **Composer** -> *Backend*
+- **Yarn** -> _Frontend_
+- **Composer** -> _Backend_
 
 #### Build Tools
 
-- **Vite** -> *Builder*
-- **Webpack** -> *Bundler*
-- **Babel** -> *Transcompiler*
-- **ESLint** -> *Linter*
+- **Vite** -> _Builder_
+- **Webpack** -> _Bundler_
+- **Babel** -> _Transcompiler_
+- **ESLint** -> _Linter_
 
 #### Git & Version Control
 
-- **Git** -> *GitHub*
+- **Git** -> _GitHub_
 
 ## FUNCTIONALITY
 
@@ -193,55 +195,55 @@ There are many functionalities that needs to be implemented for the project to b
 
 ### Primary Functionalities
 
-|Fonctionality|*FN0001: Choose Roadmap*|
-|:------------------------------:|:-------------------------------------:|
-|**Objectif**|User can Browse and Choose a Roadmap|
-|**Description**|A Grid-view of Roadmap cards, each has information about the Roadmap and how much time needed to complete it. Users can Choose one Roadmap at a time and if they want to change it later a warning will appear.|
-|**Constraints**|-|
-|**Dependencies**|-|
-|**Priority**|High|
+|  Fonctionality   |                                                                                            _FN0001: Choose Roadmap_                                                                                             |
+| :--------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|   **Objectif**   |                                                                                      User can Browse and Choose a Roadmap                                                                                       |
+| **Description**  | A Grid-view of Roadmap cards, each has information about the Roadmap and how much time needed to complete it. Users can Choose one Roadmap at a time and if they want to change it later a warning will appear. |
+| **Constraints**  |                                                                                                        -                                                                                                        |
+| **Dependencies** |                                                                                                        -                                                                                                        |
+|   **Priority**   |                                                                                                      High                                                                                                       |
 
-|Fonctionality|*FN0002: Select Module*|
-|:------------------------------:|:-------------------------------------:|
-|**Objectif**|User can Browse and Select a module from a Roadmap|
-|**Description**|A Module is a Skill or a set of Skills that the user needs to learn, each skill should show information, Resources when selected|
-|**Constraints**|-|
-|**Dependencies**|FN0001|
-|**Priority**|High|
+|  Fonctionality   |                                                     _FN0002: Select Module_                                                      |
+| :--------------: | :------------------------------------------------------------------------------------------------------------------------------: |
+|   **Objectif**   |                                        User can Browse and Select a module from a Roadmap                                        |
+| **Description**  | A Module is a Skill or a set of Skills that the user needs to learn, each skill should show information, Resources when selected |
+| **Constraints**  |                                                                -                                                                 |
+| **Dependencies** |                                                              FN0001                                                              |
+|   **Priority**   |                                                               High                                                               |
 
-|Fonctionality|*FN0003: Authentification*|
-|:------------------------------:|:-------------------------------------:|
-|**Objectif**|User can Sign up or Log in|
-|**Description**|A Guest can Sign up by providing *full name*, *email*, *username*, *password*, and an *avatar* will be generated automatically if signed up successfully. User can Log in by providing *username*/*email*, and *password*. Auth helps guarding data in database rather than in local storage so nothing happens to it.|
-|**Constraints**|-|
-|**Dependencies**|-|
-|**Priority**|Medium|
+|  Fonctionality   |                                                                                                                                               _FN0003: Authentification_                                                                                                                                               |
+| :--------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|   **Objectif**   |                                                                                                                                               User can Sign up or Log in                                                                                                                                               |
+| **Description**  | A Guest can Sign up by providing _full name_, _email_, _username_, _password_, and an _avatar_ will be generated automatically if signed up successfully. User can Log in by providing _username_/_email_, and _password_. Auth helps guarding data in database rather than in local storage so nothing happens to it. |
+| **Constraints**  |                                                                                                                                                           -                                                                                                                                                            |
+| **Dependencies** |                                                                                                                                                           -                                                                                                                                                            |
+|   **Priority**   |                                                                                                                                                         Medium                                                                                                                                                         |
 
 ### Secondary Functionalities
 
-|Fonctionality|*FN0004: Show Interview Question*|
-|:------------------------------:|:-------------------------------------:|
-|**Objectif**|User can See an interview question|
-|**Description**|Users can see interview questions with their answers|
-|**Constraints**|-|
-|**Dependencies**|-|
-|**Priority**|low|
+|  Fonctionality   |          _FN0004: Show Interview Question_           |
+| :--------------: | :--------------------------------------------------: |
+|   **Objectif**   |          User can See an interview question          |
+| **Description**  | Users can see interview questions with their answers |
+| **Constraints**  |                          -                           |
+| **Dependencies** |                          -                           |
+|   **Priority**   |                         low                          |
 
-|Fonctionality|*FN0005: Choose Learning Mode*|
-|:------------------------------:|:-------------------------------------:|
-|**Objectif**|User can Choose a prefered Learning mode|
-|**Description**|Learning Mode is how the user wants to learn and how much time is availlable|
-|**Constraints**|- **Relaxed**(*Own Pace*): Continue without a timer - **Normal**(*Part-time*): Standard time for must of the users - **Hardcore**(*Immersive*): Half the standard time|
-|**Dependencies**|FN0001|
-|**Priority**|low|
+|  Fonctionality   |                                                                     _FN0005: Choose Learning Mode_                                                                     |
+| :--------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|   **Objectif**   |                                                                User can Choose a prefered Learning mode                                                                |
+| **Description**  |                                              Learning Mode is how the user wants to learn and how much time is availlable                                              |
+| **Constraints**  | - **Relaxed**(_Own Pace_): Continue without a timer - **Normal**(_Part-time_): Standard time for must of the users - **Hardcore**(_Immersive_): Half the standard time |
+| **Dependencies** |                                                                                 FN0001                                                                                 |
+|   **Priority**   |                                                                                  low                                                                                   |
 
-|Fonctionality|*FN0006: Search Resources*|
-|:------------------------------:|:-------------------------------------:|
-|**Objectif**|User can search for resources|
-|**Description**|User can search for a resource via tags, keywords, or any information regarding them|
-|**Constraints**|-|
-|**Dependencies**|FN0002|
-|**Priority**|low|
+|  Fonctionality   |                              _FN0006: Search Resources_                              |
+| :--------------: | :----------------------------------------------------------------------------------: |
+|   **Objectif**   |                            User can search for resources                             |
+| **Description**  | User can search for a resource via tags, keywords, or any information regarding them |
+| **Constraints**  |                                          -                                           |
+| **Dependencies** |                                        FN0002                                        |
+|   **Priority**   |                                         low                                          |
 
 ## ACCESSIBILITY
 
@@ -293,28 +295,28 @@ As I'm the only one working on the project it's a given that I'll be responsible
 - [x] Database
 - [x] Wireframes
 - [x] Designs
-- [x] Back-end -  API Development
+- [x] Back-end - API Development
   - [x] Roadmaps endpoint
   - [x] Resources endpoint
   - [x] Interview Questions endpoint
   - [x] Auth endpoint
-- [ ] Front-end -  UI Development
+- [ ] Front-end - UI Development
   - [ ] Homepage
   - [ ] Login/Signup
 - [ ] Release v1.0
 
 ## DEADLINES
 
-| Phase         | Deadline   |
-|:--------------|:----------:|
-| Specification | March 21st, 2022 |
-| Modelization  | 2 Days |
-| Database      | 3 Days |
-| Wireframes    | 2 Days |
-| Designs       | 7 Days |
-| Back-end - API| 3 Days |
-| Front-end - UI| 15 Days |
-| Release v1.0  | June 29th, 2022 |
+| Phase          |     Deadline     |
+| :------------- | :--------------: |
+| Specification  | March 21st, 2022 |
+| Modelization   |      2 Days      |
+| Database       |      3 Days      |
+| Wireframes     |      2 Days      |
+| Designs        |      7 Days      |
+| Back-end - API |      3 Days      |
+| Front-end - UI |     15 Days      |
+| Release v1.0   | June 29th, 2022  |
 
 ## Conclusion & Perspectives
 

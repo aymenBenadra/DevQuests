@@ -5,3 +5,4 @@ vendor/
 public/identicons
 report.txt
 report.csv
+.rnd
