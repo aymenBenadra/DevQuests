@@ -146,10 +146,23 @@ class Auth extends Controller
 
         Response::send(
             array(
-                "message" => "Logged in successfully!",
-                "jwt" => $jwt
+                "message" => "Logged in successfully!"
             )
         );
+    }
+
+    /**
+     * Logout an User
+     * 
+     * @return void
+     */
+    public function logout()
+    {
+        setcookie(name:'jwt', value:'', expires_or_options:time() - 3600, httponly:true);
+
+        Response::send([
+            'status' => 'Logged out successfully!'
+        ]);
     }
 
     /**
