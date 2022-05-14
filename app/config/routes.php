@@ -1,12 +1,44 @@
 <?php
 
 /**
+ ** Documentation: Postman
+ */
+
+use App\Controllers\Auth;
+use Core\Helpers\Response;
+use Core\Router;
+
+$router->get('/', fn () => Router::redirect('https://documenter.getpostman.com/view/19708524/UyxjF5zC'), ['Auth@admin']);
+
+/**
  ** Auth Routes
  */
 //? Guest
 $router->post('register', 'Auth@register', ['Auth@guest', 'Validation@username|name|email|password@user']); //*🚀
 $router->post('register/admin', 'Auth@registerAdmin', ['Auth@guest', 'Validation@username|name|email|password@user']); //*🚀
 $router->post('login', 'Auth@login', ['Auth@guest', 'Validation@login|password@user']); //*🚀
+$router->get('logout', 'Auth@logout', ['Auth@client']); //*🚀
+
+/**
+ ** User Routes
+ */
+//? Client
+$router->get('user', function () {
+    Response::send([
+        'status' => 'success',
+        'data' => [
+            'user' => Auth::user()
+        ]
+    ]);
+}, ['Auth@client']); //*🚀
+$router->get('user/avatar', function () {
+    Response::send([
+        'status' => 'success',
+        'data' => [
+            'avatar' => file_get_contents(dirname(dirname(__DIR__)) . "/public/identicons/" . Auth::user()->avatar)
+        ]
+    ]);
+}, ['Auth@client']); //*🚀
 
 /**
  ** Resources Routes
