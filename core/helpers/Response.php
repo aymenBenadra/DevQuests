@@ -29,7 +29,10 @@ class Response
      */
     public static function send($response)
     {
-        exit(json_encode($response));
+        if (is_array($response)) {
+            $response = json_encode($response);
+        }
+        exit($response);
     }
 
     /**

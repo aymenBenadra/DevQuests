@@ -32,12 +32,10 @@ $router->get('user', function () {
     ]);
 }, ['Auth@client']); //*🚀
 $router->get('user/avatar', function () {
-    Response::send([
-        'status' => 'success',
-        'data' => [
-            'avatar' => file_get_contents(dirname(dirname(__DIR__)) . "/public/identicons/" . Auth::user()->avatar)
-        ]
-    ]);
+    Response::headers(contentType: 'image/svg+xml');
+    Response::send(
+        file_get_contents(dirname(dirname(__DIR__)) . "/public/identicons/" . Auth::user()->avatar)
+    );
 }, ['Auth@client']); //*🚀
 
 /**

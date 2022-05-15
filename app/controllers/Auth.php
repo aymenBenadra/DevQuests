@@ -35,24 +35,6 @@ class Auth extends Controller
      */
     public function register($data = [])
     {
-        $user = $this->model('User')->getBy('username', $data['username']);
-
-        if ($user) {
-            Router::abort(400, [
-                'status' => 'error',
-                'message' => 'Username already taken'
-            ]);
-        }
-
-        $user = $this->model('User')->getBy('email', $data['email']);
-
-        if ($user) {
-            Router::abort(400, [
-                'status' => 'error',
-                'message' => 'Email already exists'
-            ]);
-        }
-
         // Hash password
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
@@ -110,13 +92,6 @@ class Auth extends Controller
             ? $this->model('User')->getBy('email', $data['login'])
             : $this->model('User')->getBy('username', $data['login']);
 
-        if (!$user) {
-            Router::abort(404, [
-                'status' => 'error',
-                'message' => 'User not found'
-            ]);
-        }
-
         if (!password_verify($data['password'], $user->password)) {
             Router::abort(401, [
                 'status' => 'error',
@@ -142,7 +117,7 @@ class Auth extends Controller
         $jwt = JWT::encode($payload, $secret_key, "HS256");
 
         // Set expirable cookie for JWT
-        setcookie(name:'jwt', value:$jwt, expires_or_options:$expire_claim, httponly:true);
+        setcookie(name: 'jwt', value: $jwt, expires_or_options: $expire_claim, httponly: true);
 
         Response::send(
             array(
@@ -158,7 +133,7 @@ class Auth extends Controller
      */
     public function logout()
     {
-        setcookie(name:'jwt', value:'', expires_or_options:time() - 3600, httponly:true);
+        setcookie(name: 'jwt', value: '', expires_or_options: time() - 3600, httponly: true);
 
         Response::send([
             'status' => 'Logged out successfully!'
