@@ -81,7 +81,7 @@ DevQuests follows the learning by doing method by offering Detailed Roadmaps\* w
    - Users can _answer_ an Interview Question.
 2. **Adding Content**:
    1. Add _Roadmaps_.
-   2. Add _Resources_ on each _Module_.
+   2. Add _Resources_.
    3. Add _Interview Questions_.
 3. **Adding Secondary Functionalities**:
    1. Authentification for saving progress.
@@ -91,12 +91,18 @@ DevQuests follows the learning by doing method by offering Detailed Roadmaps\* w
 
 ### Site map
 
-- [Home](#home)
-  - [Login](#login)
-  - [Signup](#signup)
-  - [Logout](#logout)
-- [Roadmap](#roadmap)
-- [404](#404)
+- Homepage
+  - Login
+  - Signup
+  - Logout
+  - Roadmaps
+  - Resources
+  - Interview Questions
+- Roadmap page
+  - Roadmap
+    - Modules
+      - Nodes
+- 404 page
 
 ### Content types
 
@@ -111,11 +117,6 @@ DevQuests follows the learning by doing method by offering Detailed Roadmaps\* w
 - **Learning Mode**
   - Relaxed
   - Normal
-  - Hardcore
-- **Recommendation**
-  - Required
-  - Recommended
-  - Optional
 
 ## MODELIZATION
 
@@ -144,7 +145,6 @@ DevQuests follows the learning by doing method by offering Detailed Roadmaps\* w
 - **Html 5**
 - **CSS 3**
   - **TailwindCSS**
-  - **Daisy UI**
 - **Javascript ES6**
 - **React.js**
   - **React Router**
@@ -303,6 +303,7 @@ As I'm the only one working on the project it's a given that I'll be responsible
 - [ ] Front-end - UI Development
   - [ ] Homepage
   - [ ] Login/Signup
+  - [ ] Roadmap page
 - [ ] Release v1.0
 
 ## DEADLINES
@@ -314,7 +315,7 @@ As I'm the only one working on the project it's a given that I'll be responsible
 | Database       |      3 Days      |
 | Wireframes     |      2 Days      |
 | Designs        |      7 Days      |
-| Back-end - API |      3 Days      |
+| Back-end - API |     10 Days      |
 | Front-end - UI |     15 Days      |
 | Release v1.0   | June 29th, 2022  |
 
