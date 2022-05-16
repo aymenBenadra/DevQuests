@@ -10,9 +10,6 @@
  ########:: ########:::. ###::::: ##### ##:. #######:: ########:. ######::::: ##::::. ######::
 ........:::........:::::...::::::.....:..:::.......:::........:::......::::::..::::::......:::
 -->
-
-DevQuests is a simple, open-source, community-driven platform for developers to create and share roadmaps for their careers.
-
 ## TABLE OF CONTENT
 
 - [DevQuests](#devquests)
@@ -195,55 +192,55 @@ There are many functionalities that needs to be implemented for the project to b
 
 ### Primary Functionalities
 
-|  Fonctionality   |                                                                                            _FN0001: Choose Roadmap_                                                                                             |
-| :--------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|   **Objectif**   |                                                                                      User can Browse and Choose a Roadmap                                                                                       |
-| **Description**  | A Grid-view of Roadmap cards, each has information about the Roadmap and how much time needed to complete it. Users can Choose one Roadmap at a time and if they want to change it later a warning will appear. |
-| **Constraints**  |                                                                                                        -                                                                                                        |
-| **Dependencies** |                                                                                                        -                                                                                                        |
-|   **Priority**   |                                                                                                      High                                                                                                       |
+|  Fonctionality   | _FN0001: Choose Roadmap_ |
+| :--------------: | :----------------------: |
+| **Objectif** | User can Browse and Choose a Roadmap |
+| **Description** | A Grid-view of Roadmap cards, each has information about the Roadmap and how much time needed to complete it. Users can Choose one Roadmap at a time and if they want to change it later a warning will appear. |
+| **Constraints** | - |
+| **Dependencies** | - |
+| **Priority** | High |
 
-|  Fonctionality   |                                                     _FN0002: Select Module_                                                      |
-| :--------------: | :------------------------------------------------------------------------------------------------------------------------------: |
-|   **Objectif**   |                                        User can Browse and Select a module from a Roadmap                                        |
-| **Description**  | A Module is a Skill or a set of Skills that the user needs to learn, each skill should show information, Resources when selected |
-| **Constraints**  |                                                                -                                                                 |
-| **Dependencies** |                                                              FN0001                                                              |
-|   **Priority**   |                                                               High                                                               |
+| Fonctionality | _FN0002: Select Module_ |
+| :-----------: | :---------------------: |
+| **Objectif** | User can Browse and Select a module from a Roadmap |
+| **Description** | A Module is a Skill or a set of Skills that the user needs to learn, each skill should show information, Resources when selected |
+| **Constraints** | - |
+| **Dependencies** | FN0001 |
+| **Priority** | High |
 
-|  Fonctionality   |                                                                                                                                               _FN0003: Authentification_                                                                                                                                               |
-| :--------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|   **Objectif**   |                                                                                                                                               User can Sign up or Log in                                                                                                                                               |
-| **Description**  | A Guest can Sign up by providing _full name_, _email_, _username_, _password_, and an _avatar_ will be generated automatically if signed up successfully. User can Log in by providing _username_/_email_, and _password_. Auth helps guarding data in database rather than in local storage so nothing happens to it. |
-| **Constraints**  |                                                                                                                                                           -                                                                                                                                                            |
-| **Dependencies** |                                                                                                                                                           -                                                                                                                                                            |
-|   **Priority**   |                                                                                                                                                         Medium                                                                                                                                                         |
+| Fonctionality | _FN0003: Authentification_ |
+| :-----------: | :------------------------: |
+| **Objectif** | User can Sign up or Log in |
+| **Description** | A Guest can Sign up by providing _full name_, _email_, _username_, _password_, and an _avatar_ will be generated automatically if signed up successfully. User can Log in by providing _username_/_email_, and _password_. Auth helps guarding data in database rather than in local storage so nothing happens to it. |
+| **Constraints** | - |
+| **Dependencies** | - |
+| **Priority** | Medium |
 
 ### Secondary Functionalities
 
-|  Fonctionality   |          _FN0004: Show Interview Question_           |
-| :--------------: | :--------------------------------------------------: |
-|   **Objectif**   |          User can See an interview question          |
-| **Description**  | Users can see interview questions with their answers |
-| **Constraints**  |                          -                           |
-| **Dependencies** |                          -                           |
-|   **Priority**   |                         low                          |
+| Fonctionality | _FN0004: Show Interview Question_ |
+| :-----------: | :-------------------------------: |
+| **Objectif** | User can See an interview question |
+| **Description** | Users can see interview questions with their answers |
+| **Constraints** | - |
+| **Dependencies** | - |
+| **Priority** | low |
 
-|  Fonctionality   |                                                                     _FN0005: Choose Learning Mode_                                                                     |
-| :--------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|   **Objectif**   |                                                                User can Choose a prefered Learning mode                                                                |
-| **Description**  |                                              Learning Mode is how the user wants to learn and how much time is availlable                                              |
-| **Constraints**  | - **Relaxed**(_Own Pace_): Continue without a timer - **Normal**(_Part-time_): Standard time for must of the users - **Hardcore**(_Immersive_): Half the standard time |
-| **Dependencies** |                                                                                 FN0001                                                                                 |
-|   **Priority**   |                                                                                  low                                                                                   |
+| Fonctionality | _FN0005: Choose Learning Mode_ |
+| :-----------: | :----------------------------: |
+| **Objectif** | User can Choose a prefered Learning mode |
+| **Description** | Learning Mode is how the user wants to learn and how much time is availlable |
+| **Constraints** | - **Relaxed**(_Own Pace_): Continue without a timer - **Normal**(_Part-time_): Standard time for must of the users - **Hardcore**(_Immersive_): Half the standard time |
+| **Dependencies** | FN0001 |
+| **Priority** | low |
 
-|  Fonctionality   |                              _FN0006: Search Resources_                              |
-| :--------------: | :----------------------------------------------------------------------------------: |
-|   **Objectif**   |                            User can search for resources                             |
-| **Description**  | User can search for a resource via tags, keywords, or any information regarding them |
-| **Constraints**  |                                          -                                           |
-| **Dependencies** |                                        FN0002                                        |
-|   **Priority**   |                                         low                                          |
+| Fonctionality |_FN0006: Search Resources_|
+| :-----------: | :----------------------: |
+| **Objectif** | User can search for resources |
+| **Description** | User can search for a resource via tags, keywords, or any information regarding them |
+| **Constraints** | - |
+| **Dependencies** | FN0002 |
+| **Priority** | low |
 
 ## ACCESSIBILITY
 
