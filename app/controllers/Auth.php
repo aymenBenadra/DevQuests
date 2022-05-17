@@ -175,7 +175,7 @@ class Auth extends Controller
             return null;
         }
 
-        $token = JWT::decode($jwt, new Key($_ENV['JWT_SECRET_KEY'], "HS256"));
+        $token = JWT::decode($jwt, new Key($_ENV['JWT_SECRET_KEY'], $_ENV['JWT_ALGORITHM']));
 
         $user = (new User)->getBy('username', $token->sub);
 
