@@ -67,12 +67,10 @@ class Auth
         // Redirect to login page if guest and to home page if user
         if (!$jwtToken) {
             Router::abort(401, [
-                'status' => 'error',
                 'message' => 'Unauthorized: You must be logged in'
             ]);
         } else {
             Router::abort(403, [
-                'status' => 'error',
                 'message' => 'Unauthorized: You\'re not allowed to access this page'
             ]);
         }
@@ -90,7 +88,7 @@ class Auth
             return false;
         }
         try {
-            $token = JWT::decode($jwt, new Key($_ENV['JWT_SECRET_KEY'], "HS256"));
+            $token = JWT::decode($jwt, new Key($_ENV['JWT_SECRET_KEY'], $_ENV['JWT_ALGORITHM']));
 
             // Check if User exists
             $user = (new User())->getBy('username', $token->sub);
@@ -101,7 +99,6 @@ class Auth
             return true;
         } catch (Exception $e) {
             Router::abort(401, [
-                'status' => 'error',
                 'message' => 'Unauthorized: ' . $e->getMessage()
             ]);
         }
@@ -136,7 +133,6 @@ class Auth
             return false;
         } catch (Exception $e) {
             Router::abort(401, [
-                'status' => 'error',
                 'message' => 'Unauthorized: ' . $e->getMessage()
             ]);
         }
