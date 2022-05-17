@@ -17,6 +17,7 @@ $router->get('/', fn () => Router::redirect('https://documenter.getpostman.com/v
 $router->post('register', 'Auth@register', ['Auth@guest', 'Validation@username|name|email|password@user']); //*🚀
 $router->post('register/admin', 'Auth@registerAdmin', ['Auth@guest', 'Validation@username|name|email|password@user']); //*🚀
 $router->post('login', 'Auth@login', ['Auth@guest', 'Validation@login|password@user']); //*🚀
+$router->get('refresh', 'Auth@refresh'); //*🚀
 $router->get('logout', 'Auth@logout', ['Auth@client']); //*🚀
 
 /**
@@ -25,16 +26,13 @@ $router->get('logout', 'Auth@logout', ['Auth@client']); //*🚀
 //? Client
 $router->get('user', function () {
     Response::send([
-        'status' => 'success',
-        'data' => [
-            'user' => Auth::user()
-        ]
+        Auth::user()
     ]);
 }, ['Auth@client']); //*🚀
 $router->get('user/avatar', function () {
     Response::headers(contentType: 'image/svg+xml');
     Response::send(
-        file_get_contents(dirname(dirname(__DIR__)) . "/public/identicons/" . Auth::user()->avatar)
+        Auth::user()->avatar
     );
 }, ['Auth@client']); //*🚀
 
