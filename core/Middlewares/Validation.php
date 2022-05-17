@@ -50,7 +50,6 @@ class Validation
         // if data fields count is not equal to the rules count, return false
         if (count($data) !== count($rulesToValidate)) {
             Router::abort(400, [
-                'status' => 'error',
                 'message' => 'The request data fields count is not equal to the rules count'
             ]);
         }
@@ -58,7 +57,6 @@ class Validation
         // Chack data fields validity
         if (array_diff(array_keys($data), array_keys($rulesToValidate))) {
             Router::abort(400, [
-                'status' => 'error',
                 'message' => 'The request data fields are not valid'
             ]);
         }
@@ -72,7 +70,6 @@ class Validation
 
             if ($result !== true) {
                 Router::abort(400, [
-                    'status' => 'error',
                     'message' => ucfirst($field) . ': ' . $result[0]
                 ]);
             }

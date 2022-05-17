@@ -39,8 +39,7 @@ class Modules extends Controller
         $module = $this->model->get($data['id']);
 
         Response::send([
-            'status' => 'success',
-            'data' => $module
+            $module
         ]);
     }
 
@@ -65,14 +64,12 @@ class Modules extends Controller
         if ($this->model->isCompleted($user_id, $data['id'])) {
             if ($this->model->uncomplete($user_id, $data['id']) === false) {
                 Router::abort(500, [
-                    'status' => 'error',
                     'message' => 'Server error'
                 ]);
             }
         } else {
             if ($this->model->complete($user_id, $data['id']) === false) {
                 Router::abort(500, [
-                    'status' => 'error',
                     'message' => 'Server error'
                 ]);
             }
@@ -86,7 +83,7 @@ class Modules extends Controller
         }
 
         Response::send([
-            'status' => 'Toggled successfully.'
+            'message' => 'Toggled successfully.'
         ]);
     }
 
@@ -100,13 +97,12 @@ class Modules extends Controller
     {
         if (!$this->model->delete($data['id'])) {
             Router::abort(500, [
-                'status' => 'error',
                 'message' => 'Server error'
             ]);
         }
 
         Response::send([
-            'status' => 'Deleted successfully.'
+            'message' => 'Deleted successfully.'
         ]);
     }
 }

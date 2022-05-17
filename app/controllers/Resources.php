@@ -38,9 +38,7 @@ class Resources extends Controller
         $resources = $this->model->getAll();
 
         Response::send([
-            'status' => 'success',
-            'data' => $resources,
-            'count' => count($resources)
+            $resources
         ]);
     }
 
@@ -53,8 +51,7 @@ class Resources extends Controller
     public function show($data = [])
     {
         Response::send([
-            'status' => 'success',
-            'data' => $this->model->get($data['id'])
+            $this->model->get($data['id'])
         ]);
     }
 
@@ -68,14 +65,13 @@ class Resources extends Controller
     {
         if (!$this->model->add($data)) {
             Router::abort(500, [
-                'status' => 'error',
                 'message' => 'Server error'
             ]);
         }
 
         Response::code(201);
         Response::send([
-            'status' => 'Created successfully.'
+            'message' => 'Created successfully.'
         ]);
     }
 
@@ -92,13 +88,12 @@ class Resources extends Controller
 
         if (!$this->model->update($id, $data)) {
             Router::abort(500, [
-                'status' => 'error',
                 'message' => 'Server error'
             ]);
         }
 
         Response::send([
-            'status' => 'Updated successfully.'
+            'message' => 'Updated successfully.'
         ]);
     }
 
@@ -112,13 +107,12 @@ class Resources extends Controller
     {
         if (!$this->model->delete($data['id'])) {
             Router::abort(500, [
-                'status' => 'error',
                 'message' => 'Server error'
             ]);
         }
 
         Response::send([
-            'status' => 'Deleted successfully.'
+            'message' => 'Deleted successfully.'
         ]);
     }
 }

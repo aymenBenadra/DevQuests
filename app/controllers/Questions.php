@@ -39,15 +39,12 @@ class Questions extends Controller
 
         if ($questions === false) {
             Router::abort(500, [
-                'status' => 'error',
                 'message' => 'Server error'
             ]);
         }
 
         Response::send([
-            'status' => 'success',
-            'data' => $questions,
-            'count' => count($questions)
+            $questions
         ]);
     }
 
@@ -62,8 +59,7 @@ class Questions extends Controller
         $question = $this->model->get($data['id']);
 
         Response::send([
-            'status' => 'success',
-            'data' => $question
+            $question
         ]);
     }
 
@@ -77,17 +73,13 @@ class Questions extends Controller
     {
         if (!$this->model->add($data)) {
             Router::abort(500, [
-                'status' => 'error',
                 'message' => 'Server error'
             ]);
         }
 
         Response::code(201);
         Response::send([
-            'status' => 'Created successfully.',
-            'data' => $this->model->get(
-                $this->model->getLastInsertedId()
-            )
+            'message' => 'Created successfully.'
         ]);
     }
 
@@ -104,14 +96,12 @@ class Questions extends Controller
 
         if (!$this->model->update($id, $data)) {
             Router::abort(500, [
-                'status' => 'error',
                 'message' => 'Server error'
             ]);
         }
 
         Response::send([
-            'status' => 'Updated successfully.',
-            'data' => $this->model->get($id)
+            'message' => 'Updated successfully.'
         ]);
     }
 
@@ -125,13 +115,12 @@ class Questions extends Controller
     {
         if (!$this->model->delete($data['id'])) {
             Router::abort(500, [
-                'status' => 'error',
                 'message' => 'Server error'
             ]);
         }
 
         Response::send([
-            'status' => 'Deleted successfully.'
+            'message' => 'Deleted successfully.'
         ]);
     }
 }

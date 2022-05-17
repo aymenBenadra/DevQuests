@@ -39,15 +39,12 @@ class Roadmaps extends Controller
 
         if ($roadmaps === false) {
             Router::abort(500, [
-                'status' => 'error',
                 'message' => 'Server error'
             ]);
         }
 
         Response::send([
-            'status' => 'success',
-            'data' => $roadmaps,
-            'count' => count($roadmaps)
+            $roadmaps
         ]);
     }
 
@@ -63,15 +60,12 @@ class Roadmaps extends Controller
 
         if ($modules === false) {
             Router::abort(500, [
-                'status' => 'error',
                 'message' => 'Server error'
             ]);
         }
 
         Response::send([
-            'status' => 'success',
-            'data' => $modules,
-            'count' => count($modules)
+            $modules
         ]);
     }
 
@@ -93,8 +87,7 @@ class Roadmaps extends Controller
         }
 
         Response::send([
-            'status' => 'success',
-            'data' => $roadmap
+            $roadmap
         ]);
     }
 
@@ -111,7 +104,6 @@ class Roadmaps extends Controller
 
         if (!$this->model->add($data)) {
             Router::abort(500, [
-                'status' => 'error',
                 'message' => 'Server error'
             ]);
         }
@@ -132,7 +124,6 @@ class Roadmaps extends Controller
                 if (!$this->model('Module')->add($module)) {
                     $this->model->delete($roadmap->id);
                     Router::abort(500, [
-                        'status' => 'error',
                         'message' => 'Server error: Module ' . $module['title'] . ' not added'
                     ]);
                 }
@@ -145,7 +136,6 @@ class Roadmaps extends Controller
                     if (!$this->model('Node')->addMultiple($module_id, $nodes)) {
                         $this->model->delete($roadmap->id);
                         Router::abort(500, [
-                            'status' => 'error',
                             'message' => 'Server error: Module ' . $module['title'] . ' Nodes not added'
                         ]);
                     }
@@ -155,7 +145,7 @@ class Roadmaps extends Controller
 
         Response::code(201);
         Response::send([
-            'status' => 'Created successfully.'
+            'message' => 'Created successfully.'
         ]);
     }
 
@@ -173,21 +163,19 @@ class Roadmaps extends Controller
         if ($this->model->isCompleted($user_id, $data['id'])) {
             if ($this->model->uncomplete($user_id, $data['id']) === false) {
                 Router::abort(500, [
-                    'status' => 'error',
                     'message' => 'Server error'
                 ]);
             }
         } else {
             if ($this->model->complete($user_id, $data['id']) === false) {
                 Router::abort(500, [
-                    'status' => 'error',
                     'message' => 'Server error'
                 ]);
             }
         }
 
         Response::send([
-            'status' => 'Toggled successfully.'
+            'message' => 'Toggled successfully.'
         ]);
     }
 
@@ -212,8 +200,7 @@ class Roadmaps extends Controller
         $status['uncompleted_modules'] = $this->model('Module')->uncompleted($data['id']);
 
         Response::send([
-            'status' => 'Retrieved successfully.',
-            'data' => $status
+            $status
         ]);
     }
 
@@ -231,21 +218,19 @@ class Roadmaps extends Controller
         if ($this->model->isRelaxed($user_id, $data['id'])) {
             if ($this->model->unrelax($user_id, $data['id']) === false) {
                 Router::abort(500, [
-                    'status' => 'error',
                     'message' => 'Server error'
                 ]);
             }
         } else {
             if ($this->model->relax($user_id, $data['id']) === false) {
                 Router::abort(500, [
-                    'status' => 'error',
                     'message' => 'Server error'
                 ]);
             }
         }
 
         Response::send([
-            'status' => 'Toggled successfully.'
+            'message' => 'Toggled successfully.'
         ]);
     }
 
@@ -259,13 +244,12 @@ class Roadmaps extends Controller
     {
         if (!$this->model->delete($data['id'])) {
             Router::abort(500, [
-                'status' => 'error',
                 'message' => 'Server error'
             ]);
         }
 
         Response::send([
-            'status' => 'Deleted successfully.'
+            'message' => 'Deleted successfully.'
         ]);
     }
 }
