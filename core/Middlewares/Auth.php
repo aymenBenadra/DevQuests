@@ -55,7 +55,7 @@ class Auth
                 break;
 
             case 'admin':
-                if ($this->checkJWTAndRole($jwtToken, 'admin')) {
+                if ($this->checkJWT($jwtToken, 'admin')) {
                     return;
                 }
                 break;
@@ -80,57 +80,42 @@ class Auth
      * Checks if JWT is valid and returns true if it does
      * 
      * @param  string $jwt
-     * @return boolean
-     */
-    public function checkJWT($jwt)
-    {
-        if (!$jwt) {
-            return false;
-        }
-        try {
-            $token = JWT::decode($jwt, new Key($_ENV['JWT_SECRET_KEY'], $_ENV['JWT_ALGORITHM']));
-
-            // Check if User exists
-            $user = (new User())->getBy('username', $token->sub);
-            if (!$user) {
-                throw new Exception('User not found');
-            }
-
-            return true;
-        } catch (Exception $e) {
-            Router::abort(401, [
-                'message' => 'Unauthorized: ' . $e->getMessage()
-            ]);
-        }
-    }
-
-    /**
-     * Checks if user is authorized
-     * 
-     * @param  string $jwt
      * @param  string $role
      * @return boolean
      */
-    public function checkJWTAndRole($jwt, $role)
+    public function checkJWT($jwt, $role = null)
     {
-        if (!$jwt) {
-            return false;
-        }
+        $refreshToken = Request::refreshToken();
+
         try {
-            $token = JWT::decode($jwt, new Key($_ENV['JWT_SECRET_KEY'], "HS256"));
+            if (!$refreshToken) {
+                throw new Exception('Invalid Refresh Token');
+            }
+            if (!$jwt) {
+                throw new Exception('Invalid Access Token');
+            }
+
+            $accessToken = JWT::decode($jwt, new Key($_ENV['JWT_SECRET_KEY'], $_ENV['JWT_ALGORITHM']));
+            $refreshToken = JWT::decode($refreshToken, new Key($_ENV['JWT_SECRET_KEY'], $_ENV['JWT_ALGORITHM']));
+
+            // Check if access token is valid
+            if ($accessToken->sub !== $refreshToken->sub) {
+                throw new Exception('Invalid Access Token');
+            }
+
 
             // Check if User exists
-            $user = (new User())->getBy('username', $token->sub);
+            $user = (new User())->getBy('username', $accessToken->sub);
             if (!$user) {
                 throw new Exception('User not found');
             }
 
             // Check if user is authorized
-            if ($user->is_admin === 1 && $role === 'admin') {
-                return true;
+            if ($role === 'admin' && $user->is_admin !== 1) {
+                throw new Exception('You\'re not allowed to access this page');
             }
 
-            return false;
+            return true;
         } catch (Exception $e) {
             Router::abort(401, [
                 'message' => 'Unauthorized: ' . $e->getMessage()

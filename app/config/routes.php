@@ -15,10 +15,10 @@ $router->get('/', fn () => Router::redirect('https://documenter.getpostman.com/v
  */
 //? Guest
 $router->post('register', 'Auth@register', ['Auth@guest', 'Validation@username|name|email|password@user']); //*🚀
-$router->post('register/admin', 'Auth@registerAdmin', ['Auth@guest', 'Validation@username|name|email|password@user']); //*🚀
+$router->post('register/admin', 'Auth@registerAdmin', ['Auth@admin', 'Validation@username|name|email|password@user']); //*🚀
 $router->post('login', 'Auth@login', ['Auth@guest', 'Validation@login|password@user']); //*🚀
 $router->get('refresh', 'Auth@refresh'); //*🚀
-$router->get('logout', 'Auth@logout', ['Auth@client']); //*🚀
+$router->get('logout', 'Auth@logout'); //*🚀
 
 /**
  ** User Routes

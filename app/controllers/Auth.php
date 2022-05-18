@@ -181,7 +181,7 @@ class Auth extends Controller
 
         $user->avatar = file_get_contents(dirname(dirname(__DIR__)) . "/public/identicons/" . $user->avatar);
 
-        unset($user->password, $user->id);
+        unset($user->password);
 
         return $user;
     }
