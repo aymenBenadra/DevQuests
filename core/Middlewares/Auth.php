@@ -63,17 +63,6 @@ class Auth
             default:
                 break;
         }
-
-        // Redirect to login page if guest and to home page if user
-        if (!$jwtToken) {
-            Router::abort(401, [
-                'message' => 'Unauthorized: You must be logged in'
-            ]);
-        } else {
-            Router::abort(403, [
-                'message' => 'Unauthorized: You\'re not allowed to access this page'
-            ]);
-        }
     }
 
     /**
@@ -89,10 +78,10 @@ class Auth
 
         try {
             if (!$refreshToken) {
-                throw new Exception('Invalid Refresh Token');
+                throw new Exception('No Refresh Token found', 401);
             }
             if (!$jwt) {
-                throw new Exception('Invalid Access Token');
+                throw new Exception('No Access Token found', 401);
             }
 
             $accessToken = JWT::decode($jwt, new Key($_ENV['JWT_SECRET_KEY'], $_ENV['JWT_ALGORITHM']));
@@ -100,24 +89,23 @@ class Auth
 
             // Check if access token is valid
             if ($accessToken->sub !== $refreshToken->sub) {
-                throw new Exception('Invalid Access Token');
+                throw new Exception('Invalid Access Token', 401);
             }
-
 
             // Check if User exists
             $user = (new User())->getBy('username', $accessToken->sub);
             if (!$user) {
-                throw new Exception('User not found');
+                throw new Exception('User not found', 404);
             }
 
             // Check if user is authorized
             if ($role === 'admin' && $user->is_admin !== 1) {
-                throw new Exception('You\'re not allowed to access this page');
+                throw new Exception('You\'re not allowed to access this page', 403);
             }
 
             return true;
         } catch (Exception $e) {
-            Router::abort(401, [
+            Router::abort($e->getCode() ? $e->getCode() : 401, [
                 'message' => 'Unauthorized: ' . $e->getMessage()
             ]);
         }
