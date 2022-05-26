@@ -43,9 +43,18 @@ class Validation
 
         // Get the rules to validate 
         foreach ($fields as $field) {
-            $rulesToValidate[$field] = $this->rules[$scope][$field];
-        }
+            if (strpos($field, '/')) {
+                $field = explode('/', $field);
 
+                if (isset($data[$field[0]])) {
+                    $rulesToValidate[$field[0]] = $this->rules[$scope][$field[0]];
+                } else {
+                    $rulesToValidate[$field[1]] = $this->rules[$scope][$field[1]];
+                }
+            } else {
+                $rulesToValidate[$field] = $this->rules[$scope][$field];
+            }
+        }
 
         // if data fields count is not equal to the rules count, return false
         if (count($data) !== count($rulesToValidate)) {
