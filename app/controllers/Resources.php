@@ -37,9 +37,9 @@ class Resources extends Controller
     {
         $resources = $this->model->getAll();
 
-        Response::send([
+        Response::send(
             $resources
-        ]);
+        );
     }
 
     /**
@@ -50,9 +50,9 @@ class Resources extends Controller
      */
     public function show($data = [])
     {
-        Response::send([
+        Response::send(
             $this->model->get($data['id'])
-        ]);
+        );
     }
 
     /**

@@ -43,9 +43,19 @@ class Roadmaps extends Controller
             ]);
         }
 
-        Response::send([
+        foreach ($roadmaps as $roadmap) {
+            $roadmap->modules = $this->model('Module')->getAllBy("roadmap_id", $roadmap->id);
+
+            if (!empty($roadmap->modules)) {
+                foreach ($roadmap->modules as $key => $module) {
+                    $roadmap->modules[$key]->nodes = $this->model('Node')->getAllBy("module_id", $module->id);
+                }
+            }
+        }
+
+        Response::send(
             $roadmaps
-        ]);
+        );
     }
 
     /**
@@ -64,9 +74,9 @@ class Roadmaps extends Controller
             ]);
         }
 
-        Response::send([
+        Response::send(
             $modules
-        ]);
+        );
     }
 
     /**
@@ -77,8 +87,11 @@ class Roadmaps extends Controller
      */
     public function show($data = [])
     {
-        $roadmap = $this->model->get($data['id']);
-        $roadmap->modules = $this->model('Module')->getAllBy("roadmap_id", $data['id']);
+        $roadmap = isset($data['id'])
+            ? $this->model->get($data['id'])
+            : $this->model->getBy('title', $data['title']);
+
+        $roadmap->modules = $this->model('Module')->getAllBy("roadmap_id", $roadmap->id);
 
         if (!empty($roadmap->modules)) {
             foreach ($roadmap->modules as $key => $module) {
@@ -86,9 +99,9 @@ class Roadmaps extends Controller
             }
         }
 
-        Response::send([
+        Response::send(
             $roadmap
-        ]);
+        );
     }
 
     /**
@@ -150,36 +163,6 @@ class Roadmaps extends Controller
     }
 
     /**
-     * Toggle completed status
-     * 
-     * @param array $data
-     * @return void
-     */
-    public function toggleCompleted($data = [])
-    {
-        // get user id from token username
-        $user_id = Auth::user()->id;
-
-        if ($this->model->isCompleted($user_id, $data['id'])) {
-            if ($this->model->uncomplete($user_id, $data['id']) === false) {
-                Router::abort(500, [
-                    'message' => 'Server error'
-                ]);
-            }
-        } else {
-            if ($this->model->complete($user_id, $data['id']) === false) {
-                Router::abort(500, [
-                    'message' => 'Server error'
-                ]);
-            }
-        }
-
-        Response::send([
-            'message' => 'Toggled successfully.'
-        ]);
-    }
-
-    /**
      * Get Roadmap status for the logged in user
      * 
      * @param array $data
@@ -199,9 +182,9 @@ class Roadmaps extends Controller
         $status['completed_modules'] = $this->model('Module')->completed($data['id']);
         $status['uncompleted_modules'] = $this->model('Module')->uncompleted($data['id']);
 
-        Response::send([
+        Response::send(
             $status
-        ]);
+        );
     }
 
     /**
@@ -230,7 +213,34 @@ class Roadmaps extends Controller
         }
 
         Response::send([
-            'message' => 'Toggled successfully.'
+            'message' => 'Relaxed successfully.'
+        ]);
+    }
+    /**
+     * Toggle Roadmap started status
+     * 
+     * @param array $data
+     * @return void
+     */
+    public function toggleStarted($data = [])
+    {
+        // get user id from token username
+        $user_id = Auth::user()->id;
+
+        if ($this->model->isStarted($user_id, $data['id'])) {
+            Response::send([
+                'message' => 'Already started.'
+            ]);
+        }
+
+        if ($this->model->start($user_id, $data['id']) === false) {
+            Router::abort(500, [
+                'message' => 'Server error'
+            ]);
+        }
+
+        Response::send([
+            'message' => 'Started successfully.'
         ]);
     }
 

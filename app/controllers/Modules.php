@@ -38,9 +38,9 @@ class Modules extends Controller
     {
         $module = $this->model->get($data['id']);
 
-        Response::send([
+        Response::send(
             $module
-        ]);
+        );
     }
 
     /**
@@ -83,7 +83,7 @@ class Modules extends Controller
         }
 
         Response::send([
-            'message' => 'Toggled successfully.'
+            'message' => 'Completed successfully.'
         ]);
     }
 

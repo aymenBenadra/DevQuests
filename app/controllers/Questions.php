@@ -43,9 +43,9 @@ class Questions extends Controller
             ]);
         }
 
-        Response::send([
+        Response::send(
             $questions
-        ]);
+        );
     }
 
     /**
@@ -58,9 +58,9 @@ class Questions extends Controller
     {
         $question = $this->model->get($data['id']);
 
-        Response::send([
+        Response::send(
             $question
-        ]);
+        );
     }
 
     /**
