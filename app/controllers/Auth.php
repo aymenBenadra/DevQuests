@@ -29,7 +29,7 @@ class Auth extends Controller
     }
 
     /**
-     * Register new User
+     * Register new User    
      * 
      * @param array $data
      * @return void
@@ -42,12 +42,12 @@ class Auth extends Controller
         // Generate Identicon
         $avatar = new Identicon(array(
             'value' => $data['username'],
-            'size' => 100
+            'size' => 45,
         ));
         $avatar = $avatar->getImageData('svg');
 
         // Save avatar in idonticons folder
-        file_put_contents(dirname(dirname(__DIR__)) . "/public/identicons/" . $data['username'] . ".svg", $avatar);
+        file_put_contents(dirname(dirname(__DIR__)) . "/public/avatars/" . $data['username'] . ".svg", $avatar);
 
         // Save avatar file name to database (without path)
         $data['avatar'] = $data['username'] . ".svg";
@@ -87,6 +87,12 @@ class Auth extends Controller
             ? $this->model('User')->getBy('email', $data['login'])
             : $this->model('User')->getBy('username', $data['login']);
 
+        if (!$user) {
+            Router::abort(401, [
+                'message' => 'No user found with this login'
+            ]);
+        }
+
         if (!password_verify($data['password'], $user->password)) {
             Router::abort(401, [
                 'message' => 'Invalid password'
@@ -97,16 +103,18 @@ class Auth extends Controller
         $refreshToken = $this->createToken($user->username, $_ENV['JWT_REFRESH_EXP_DELTA_SECONDS']);
 
         setcookie(
-            name: 'auth',
+            name: 'refresh_token',
             value: $refreshToken,
             expires_or_options: time() + $_ENV['JWT_REFRESH_EXP_DELTA_SECONDS'],
+            // domain: $_ENV['CLIENT_ADDRESS'],
             httponly: true
         );
+
         // Create Access Token
         $accessToken = $this->createToken($user->username, $_ENV['JWT_ACCESS_EXP_DELTA_SECONDS']);
 
         unset($user->password, $user->id);
-        $user->avatar = file_get_contents(dirname(dirname(__DIR__)) . "/public/identicons/" . $user->avatar);
+        $user->avatar = file_get_contents(dirname(dirname(__DIR__)) . "/public/avatars/" . $user->avatar);
         $user->accessToken = $accessToken;
 
         Response::send(
@@ -127,7 +135,7 @@ class Auth extends Controller
         // Check if refresh token is valid
         try {
             if (!$refreshToken) {
-                throw new Exception('No refresh token found');
+                throw new Exception('No refresh token found here', 401);
             }
 
             $token = JWT::decode($refreshToken, new Key($_ENV['JWT_SECRET_KEY'], $_ENV['JWT_ALGORITHM']));
@@ -135,14 +143,14 @@ class Auth extends Controller
             // Check if User exists
             $user = (new User())->getBy('username', $token->sub);
             if (!$user) {
-                throw new Exception('User not found');
+                throw new Exception('User not found', 401);
             }
 
             Response::send([
                 'accessToken' => $this->createToken($user->username, $_ENV['JWT_ACCESS_EXP_DELTA_SECONDS'])
             ]);
         } catch (Exception $e) {
-            Router::abort(401, [
+            Router::abort($e->getCode() ? $e->getCode() : 401, [
                 'message' => 'Unauthorized: ' . $e->getMessage()
             ]);
         }
@@ -155,7 +163,7 @@ class Auth extends Controller
      */
     public function logout()
     {
-        setcookie(name: 'auth', value: '', expires_or_options: time() - 1, httponly: true);
+        setcookie(name: 'refresh_token', value: '', expires_or_options: time() - 1, httponly: true);
 
         Response::send([
             'message' => 'Logged out successfully!'
@@ -175,15 +183,22 @@ class Auth extends Controller
             return null;
         }
 
-        $token = JWT::decode($jwt, new Key($_ENV['JWT_SECRET_KEY'], $_ENV['JWT_ALGORITHM']));
+        try {
 
-        $user = (new User)->getBy('username', $token->sub);
+            $token = JWT::decode($jwt, new Key($_ENV['JWT_SECRET_KEY'], $_ENV['JWT_ALGORITHM']));
 
-        $user->avatar = file_get_contents(dirname(dirname(__DIR__)) . "/public/identicons/" . $user->avatar);
+            $user = (new User)->getBy('username', $token->sub);
 
-        unset($user->password);
+            $user->avatar = file_get_contents(dirname(dirname(__DIR__)) . "/public/avatars/" . $user->avatar);
 
-        return $user;
+            unset($user->password);
+
+            return $user;
+        } catch (Exception $e) {
+            Router::abort($e->getCode() ? $e->getCode() : 401, [
+                'message' => 'Unauthorized: ' . $e->getMessage()
+            ]);
+        }
     }
 
     /**

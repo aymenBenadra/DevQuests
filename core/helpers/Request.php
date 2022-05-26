@@ -113,6 +113,6 @@ class Request
      */
     public static function refreshToken()
     {
-        return isset($_COOKIE['auth']) ? $_COOKIE['auth'] : false;
+        return isset($_COOKIE['refresh_token']) ? $_COOKIE['refresh_token'] : false;
     }
 }
