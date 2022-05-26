@@ -25,9 +25,9 @@ $router->get('logout', 'Auth@logout'); //*🚀
  */
 //? Client
 $router->get('user', function () {
-    Response::send([
+    Response::send(
         Auth::user()
-    ]);
+    );
 }, ['Auth@client']); //*🚀
 $router->get('user/avatar', function () {
     Response::headers(contentType: 'image/svg+xml');
@@ -74,12 +74,13 @@ $router->post('module/completed', 'Modules@toggleCompleted', ['Auth@client', 'Va
  */
 //? Guest
 $router->get('roadmaps', 'Roadmaps@index'); //*🚀
-$router->get('roadmap', 'Roadmaps@show', ['Validation@id@roadmap']); //*🚀
+$router->get('roadmap', 'Roadmaps@show', ['Validation@id/title@roadmap']); //*🚀
 $router->get('roadmap/modules', 'Roadmaps@getModules', ['Validation@id@roadmap']); //*🚀
 
 //? Client
 $router->get('roadmap/status', 'Roadmaps@status', ['Auth@client', 'Validation@id@roadmap']); //*🚀
 $router->post('roadmap/relaxed', 'Roadmaps@toggleRelaxed', ['Auth@client', 'Validation@id@roadmap']); //*🚀
+$router->post('roadmap/start', 'Roadmaps@toggleStarted', ['Auth@client', 'Validation@id@roadmap']); //*🚀
 
 //? Admin
 $router->post('roadmap', 'Roadmaps@store', ['Auth@admin', 'Validation@title|description|modules@roadmap']); //*🚀
