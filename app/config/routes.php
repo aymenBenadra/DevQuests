@@ -79,8 +79,9 @@ $router->get('roadmap/modules', 'Roadmaps@getModules', ['Validation@id@roadmap']
 
 //? Client
 $router->get('roadmap/status', 'Roadmaps@status', ['Auth@client', 'Validation@id@roadmap']); //*🚀
-$router->post('roadmap/relaxed', 'Roadmaps@toggleRelaxed', ['Auth@client', 'Validation@id@roadmap']); //*🚀
+$router->post('roadmap/mode', 'Roadmaps@toggleMode', ['Auth@client', 'Validation@id@roadmap']); //*🚀
 $router->post('roadmap/start', 'Roadmaps@toggleStarted', ['Auth@client', 'Validation@id@roadmap']); //*🚀
+$router->post('roadmap/reset', 'Roadmaps@reset', ['Auth@client', 'Validation@id@roadmap']); //*🚀
 
 //? Admin
 $router->post('roadmap', 'Roadmaps@store', ['Auth@admin', 'Validation@title|description|modules@roadmap']); //*🚀

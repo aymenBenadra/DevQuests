@@ -163,6 +163,39 @@ class Roadmaps extends Controller
     }
 
     /**
+     * Reset a Roadmap with its modules
+     * 
+     * @param array $data
+     * @return void
+     */
+    public function reset($data = [])
+    {
+        // Get the Roadmap
+        $roadmap = $this->model->get($data['id']);
+        $user_id = Auth::user()->id;
+
+        $roadmap->modules = $this->model('Module')->getAllBy("roadmap_id", $roadmap->id);
+
+        if ($this->model->isCompleted($user_id, $roadmap->id)) {
+            $this->model->uncomplete($user_id, $roadmap->id);
+        }
+
+        foreach ($roadmap->modules as $module) {
+            if ($this->model('Module')->isCompleted($user_id, $module->id)) {
+                if (!$this->model('Module')->uncomplete($user_id, $module->id)) {
+                    Router::abort(500, [
+                        'message' => 'Server error: Module ' . $module['title'] . ' not reseted'
+                    ]);
+                }
+            }
+        }
+
+        Response::send([
+            'message' => 'Reseted successfully.'
+        ]);
+    }
+
+    /**
      * Get Roadmap status for the logged in user
      * 
      * @param array $data
@@ -188,12 +221,12 @@ class Roadmaps extends Controller
     }
 
     /**
-     * Toggle Roadmap relaxed status
+     * Toggle Roadmap mode status
      * 
      * @param array $data
      * @return void
      */
-    public function toggleRelaxed($data = [])
+    public function toggleMode($data = [])
     {
         // get user id from token username
         $user_id = Auth::user()->id;
@@ -213,7 +246,7 @@ class Roadmaps extends Controller
         }
 
         Response::send([
-            'message' => 'Relaxed successfully.'
+            'message' => 'Toggled successfully.'
         ]);
     }
     /**
