@@ -1,5 +1,6 @@
-# DevQuests
+![](Modelization/Project%20Report.png)
 
+# DevQuests
 <!--
 '########::'########:'##::::'##::'#######::'##::::'##:'########::'######::'########::'######::
  ##.... ##: ##.....:: ##:::: ##:'##.... ##: ##:::: ##: ##.....::'##... ##:... ##..::'##... ##:
@@ -10,6 +11,7 @@
  ########:: ########:::. ###::::: ##### ##:. #######:: ########:. ######::::: ##::::. ######::
 ........:::........:::::...::::::.....:..:::.......:::........:::......::::::..::::::......:::
 -->
+
 ## TABLE OF CONTENT
 
 - [DevQuests](#devquests)
@@ -297,11 +299,12 @@ As I'm the only one working on the project it's a given that I'll be responsible
   - [x] Resources endpoint
   - [x] Interview Questions endpoint
   - [x] Auth endpoint
-- [ ] Front-end - UI Development
-  - [ ] Homepage
-  - [ ] Login/Signup
-  - [ ] Roadmap page
-- [ ] Release v1.0
+- [x] Front-end - UI Development
+  - [x] Homepage
+  - [x] Login/Signup
+  - [x] Roadmap page
+  - [x] Dashboard
+- [x] Release v1.0
 
 ## DEADLINES
 
@@ -309,11 +312,11 @@ As I'm the only one working on the project it's a given that I'll be responsible
 | :------------- | :--------------: |
 | Specification  | March 21st, 2022 |
 | Modelization   |      2 Days      |
-| Database       |      3 Days      |
+| Database       |     10 Days      |
 | Wireframes     |      2 Days      |
 | Designs        |      7 Days      |
-| Back-end - API |     10 Days      |
-| Front-end - UI |     15 Days      |
+| Back-end - API |     15 Days      |
+| Front-end - UI |     25 Days      |
 | Release v1.0   | June 29th, 2022  |
 
 ## Conclusion & Perspectives
