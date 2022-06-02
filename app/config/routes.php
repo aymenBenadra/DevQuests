@@ -45,7 +45,7 @@ $router->get('resource', 'Resources@show', ['Validation@id@resource']); //*🚀
 
 //? Admin
 $router->post('resource', 'Resources@store', ['Auth@admin', 'Validation@title|description|link@resource']); //*🚀
-$router->post('resource/update', 'Resources@update', ['Auth@admin', 'Validation@id|description|link@resource']); //*🚀
+$router->post('resource/update', 'Resources@update', ['Auth@admin', 'Validation@id|title|description|link@resource']); //*🚀
 $router->post('resource/delete', 'Resources@destroy', ['Auth@admin', 'Validation@id@resource']); //*🚀
 
 /**
