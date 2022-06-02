@@ -18,7 +18,7 @@ $router->post('register', 'Auth@register', ['Auth@guest', 'Validation@username|n
 $router->post('register/admin', 'Auth@registerAdmin', ['Auth@admin', 'Validation@username|name|email|password@user']); //*🚀
 $router->post('login', 'Auth@login', ['Auth@guest', 'Validation@login|password@user']); //*🚀
 $router->get('refresh', 'Auth@refresh'); //*🚀
-$router->get('logout', 'Auth@logout'); //*🚀
+$router->post('logout', 'Auth@logout'); //*🚀
 
 /**
  ** User Routes
@@ -56,15 +56,15 @@ $router->get('questions', 'Questions@index'); //*🚀
 $router->get('question', 'Questions@show', ['Validation@id@question']); //*🚀
 
 //? Admin
-$router->post('question', 'Questions@store', ['Auth@admin', 'Validation@question|answer@question']); //*🚀
-$router->post('question/update', 'Questions@update', ['Auth@admin', 'Validation@id|answer@question']); //*🚀
+$router->post('question', 'Questions@store', ['Auth@admin']); //*🚀
+$router->post('question/update', 'Questions@update', ['Auth@admin', 'Validation@id|question|answer@question']); //*🚀
 $router->post('question/delete', 'Questions@destroy', ['Auth@admin', 'Validation@id@question']); //*🚀
 
 /**
  ** Modules Routes
  */
 //? Guest
-$router->get('module', 'Modules@show', ['Validation@id@module']); //*🚀
+$router->get('module', 'Modules@show', ['Validation@id/title@module']); //*🚀
 
 //? Client
 $router->post('module/completed', 'Modules@toggleCompleted', ['Auth@client', 'Validation@id@module']); //*🚀
