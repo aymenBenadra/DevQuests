@@ -25,7 +25,8 @@ class Router
         'GET' => [],
         'POST' => [],
         'PUT' => [],
-        'DELETE' => []
+        'DELETE' => [],
+        'PATCH' => [],
     ];
 
     /**
@@ -102,6 +103,22 @@ class Router
     public function delete($uri, $route, $middlewares = [])
     {
         $this->routes['DELETE'][$uri] = [
+            'route' => $route,
+            'middlewares' => $middlewares
+        ];
+    }
+
+    /**
+     * Register a PATCH route.
+     *
+     * @param string $uri
+     * @param string $route
+     * @param array $middlewares
+     * @return void
+     */
+    public function patch($uri, $route, $middlewares = [])
+    {
+        $this->routes['PATCH'][$uri] = [
             'route' => $route,
             'middlewares' => $middlewares
         ];

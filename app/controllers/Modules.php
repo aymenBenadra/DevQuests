@@ -36,7 +36,9 @@ class Modules extends Controller
      */
     public function show($data = [])
     {
-        $module = $this->model->get($data['id']);
+        $module = isset($data['id'])
+            ? $this->model->get($data['id'])
+            : $this->model->getBy('title', $data['title']);
 
         Response::send(
             $module

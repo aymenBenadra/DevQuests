@@ -62,8 +62,7 @@ class Request
                 return empty($_GET) ? [] : $_GET;
                 break;
             case 'POST':
-                $data = json_decode(file_get_contents('php://input'), true) ?? $_POST;
-                return empty($_FILES) ? $data : array_merge($data, $_FILES);
+                return empty($_POST) ? json_decode(file_get_contents('php://input'), true) : $_POST;
                 break;
             case 'PUT':
                 return json_decode(file_get_contents('php://input'), true);

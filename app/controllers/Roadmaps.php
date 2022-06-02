@@ -91,6 +91,12 @@ class Roadmaps extends Controller
             ? $this->model->get($data['id'])
             : $this->model->getBy('title', $data['title']);
 
+        if ($roadmap === false) {
+            Router::abort(404, [
+                'message' => 'Roadmap not found'
+            ]);
+        }
+
         $roadmap->modules = $this->model('Module')->getAllBy("roadmap_id", $roadmap->id);
 
         if (!empty($roadmap->modules)) {
