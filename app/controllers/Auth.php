@@ -105,7 +105,7 @@ class Auth extends Controller
         setcookie(
             name: 'refresh_token',
             value: $refreshToken,
-            expires_or_options: time() + $_ENV['JWT_REFRESH_EXP_DELTA_SECONDS'],
+            // expires_or_options: time() + $_ENV['JWT_REFRESH_EXP_DELTA_SECONDS'],
             // domain: $_ENV['CLIENT_ADDRESS'],
             httponly: true
         );
@@ -135,7 +135,7 @@ class Auth extends Controller
         // Check if refresh token is valid
         try {
             if (!$refreshToken) {
-                throw new Exception('No refresh token found here', 401);
+                throw new Exception('No refresh token found here');
             }
 
             $token = JWT::decode($refreshToken, new Key($_ENV['JWT_SECRET_KEY'], $_ENV['JWT_ALGORITHM']));
@@ -143,14 +143,14 @@ class Auth extends Controller
             // Check if User exists
             $user = (new User())->getBy('username', $token->sub);
             if (!$user) {
-                throw new Exception('User not found', 401);
+                throw new Exception('User not found');
             }
 
             Response::send([
                 'accessToken' => $this->createToken($user->username, $_ENV['JWT_ACCESS_EXP_DELTA_SECONDS'])
             ]);
         } catch (Exception $e) {
-            Router::abort($e->getCode() ? $e->getCode() : 401, [
+            Router::abort(403, [
                 'message' => 'Unauthorized: ' . $e->getMessage()
             ]);
         }
