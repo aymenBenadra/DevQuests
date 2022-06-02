@@ -27,8 +27,19 @@
   - [MODELIZATION](#modelization)
     - [Use Case Diagram](#use-case-diagram)
     - [Class Diagram](#class-diagram)
-  - [DESIGN](#design)
+    - [Sequence Diagram for Choosing a Roadmap](#sequence-diagram-for-choosing-a-roadmap)
+    - [Sequence Diagram for Authentification with JWT](#sequence-diagram-for-authentification-with-jwt)
+  - [UI/UX](#uiux)
     - [Graphic Charter](#graphic-charter)
+      - [Login page](#login-page)
+      - [Sign up page](#sign-up-page)
+      - [Homepage](#homepage)
+      - [Roadmaps page](#roadmaps-page)
+      - [Roadmap page](#roadmap-page)
+      - [Questions page](#questions-page)
+      - [Resources page](#resources-page)
+      - [Dashboard page](#dashboard-page)
+      - [404 page](#404-page)
   - [TECHNOLOGICAL CHOICES](#technological-choices)
     - [Modelization](#modelization-1)
     - [Frontend](#frontend)
@@ -127,11 +138,57 @@ DevQuests follows the learning by doing method by offering Detailed Roadmaps\* w
 
 ![Class Diagram](./Modelization/class_diagram.png)
 
-## DESIGN
+### Sequence Diagram for Choosing a Roadmap
+
+![Sequence Diagram for Choosing a Roadmap](./Modelization/choose_roadmap_sequence_diagram.png)
+
+### Sequence Diagram for Authentification with JWT
+
+![Sequence Diagram for Authentification with JWT](./Modelization/Login_JWT_sequence_diagram.png)
+
+## UI/UX
 
 ### Graphic Charter
 
-[Graphic Charter](https://www.figma.com/file/UtTIub4HNUiwNsEqmdtoMR/DevQuests-Graphic-Charter?node-id=0%3A1)
+[Graphic Charter Figma Link](https://www.figma.com/file/UtTIub4HNUiwNsEqmdtoMR/DevQuests-Graphic-Charter)
+
+[Design Figma Link](https://www.figma.com/file/6KiHVO2VvatHyZjZpq7Vc9/DevQuests---File-Rouge)
+
+#### Login page
+
+![Login page](./Modelization/screenshots/Login.png)
+
+#### Sign up page
+
+![Sign up page](./Modelization/screenshots/Sign-up.png)
+
+#### Homepage
+
+![Homepage](./Modelization/screenshots/Homepage.png)
+
+#### Roadmaps page
+
+![Roadmaps page](./Modelization/screenshots/Roadmaps.png)
+
+#### Roadmap page
+
+![Roadmap page](./Modelization/screenshots/Roadmap.png)
+
+#### Questions page
+
+![Questions page](./Modelization/screenshots/Questions.png)
+
+#### Resources page
+
+![Resources page](./Modelization/screenshots/Resources.png)
+
+#### Dashboard page
+
+![Dashboard page](./Modelization/screenshots/Dashboard.png)
+
+#### 404 page
+
+![404 page](./Modelization/screenshots/404.png)
 
 ## TECHNOLOGICAL CHOICES
 
@@ -302,8 +359,13 @@ As I'm the only one working on the project it's a given that I'll be responsible
 - [x] Front-end - UI Development
   - [x] Homepage
   - [x] Login/Signup
+  - [x] Roadmaps page
   - [x] Roadmap page
+  - [x] Questions page
+  - [x] Resources page
   - [x] Dashboard
+  - [x] Profile page
+  - [x] 404 page
 - [x] Release v1.0
 
 ## DEADLINES
