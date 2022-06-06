@@ -85,4 +85,6 @@ $router->post('roadmap/reset', 'Roadmaps@reset', ['Auth@client', 'Validation@id@
 
 //? Admin
 $router->post('roadmap', 'Roadmaps@store', ['Auth@admin', 'Validation@title|description|modules@roadmap']); //*🚀
+$router->post('roadmap/update', 'Roadmaps@update', ['Auth@admin', 'Validation@id|title|description|modules@roadmap']); //*🚀
+
 $router->post('roadmap/delete', 'Roadmaps@destroy', ['Auth@admin', 'Validation@id@roadmap']); //*🚀

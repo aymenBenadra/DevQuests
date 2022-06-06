@@ -169,6 +169,59 @@ class Roadmaps extends Controller
     }
 
     /**
+     * Update a Roadmap
+     *
+     * @param array $data
+     * @return void
+     */
+    public function update($data = [])
+    {
+        $modules = $data['modules'] ?? [];
+        unset($data['modules']);
+
+        $id = $data['id'];
+        unset($data['id']);
+
+        if (!$this->model->update($id, $data)) {
+            Router::abort(500, [
+                'message' => 'Server error'
+            ]);
+        }
+
+        // Update Modules to updated Roadmap
+        if (!empty($modules)) {
+            foreach ($modules as $module) {
+                // Get module id from title
+
+                $nodes = $module['nodes'] ?? [];
+                unset($module['nodes']);
+
+                $id = $module['id'];
+                unset($module['id']);
+
+                if (!$this->model('Module')->update($id, $module)) {
+                    Router::abort(500, [
+                        'message' => 'Server error: Module ' . $module['title'] . ' not updated'
+                    ]);
+                }
+
+                // Update Nodes to updated Module
+                if (!empty($nodes)) {
+                    if (!$this->model('Node')->updateMultiple($nodes)) {
+                        Router::abort(500, [
+                            'message' => 'Server error: Module ' . $module['title'] . ' Nodes not updated'
+                        ]);
+                    }
+                }
+            }
+        }
+
+        Response::send([
+            'message' => 'Updated successfully.'
+        ]);
+    }
+
+    /**
      * Reset a Roadmap with its modules
      * 
      * @param array $data
