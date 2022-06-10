@@ -45,26 +45,4 @@ class Node extends Model
 
         return true;
     }
-
-    /**
-     * Update multiple nodes
-     * 
-     * @param array $nodes
-     * @return bool
-     */
-    public function updateMultiple($nodes)
-    {
-        foreach ($nodes as $order => $node) {
-            $node['order'] = $order;
-
-            $id = $node['id'];
-            unset($node['id']);
-
-            if (!$this->update($id, $node)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 }
