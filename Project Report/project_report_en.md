@@ -34,7 +34,7 @@ DevQuests is an e-learning platform for developers. It is a platform that allows
 
 ## Problem
 
-When you want to learn how to code, normally you'll go to a specialised school, or a coding bootcamp. But here in Morocco, there are not enough schools nor bootcamps to meet the demand as for example, YouCode can offer at most 300 places, but the demand this year reached over 6000+.
+When you want to learn how to code, normally you'll go to a specialized school, or a coding bootcamp. But here in Morocco, there are not enough schools nor bootcamps to meet the demand as for example, YouCode can offer at most 300 places, but the demand this year reached over 6000+.
 
 ## Solution
 
