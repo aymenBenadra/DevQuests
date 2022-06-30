@@ -1,4 +1,4 @@
-# DevQuests - E-Learning platform for developers
+# DevQuests v1.0 - E-Learning platform for developers
 <!--
 '########::'########:'##::::'##::'#######::'##::::'##:'########::'######::'########::'######::
  ##.... ##: ##.....:: ##:::: ##:'##.... ##: ##:::: ##: ##.....::'##... ##:... ##..::'##... ##:
@@ -11,6 +11,62 @@
 -->
 
 DevQuests is an e-learning platform for developers. It is a platform that allows you to learn and practice coding and programming in a fun and engaging way.
+
+## Table of Contents
+
+- [DevQuests v1.0 - E-Learning platform for developers](#devquests-v10---e-learning-platform-for-developers)
+  - [Table of Contents](#table-of-contents)
+  - [Problem](#problem)
+  - [Solution](#solution)
+  - [Project Glossary](#project-glossary)
+  - [Project Team](#project-team)
+  - [CONTENT STRUCTURE](#content-structure)
+    - [Site map](#site-map)
+    - [Content types](#content-types)
+    - [Taxonomies](#taxonomies)
+  - [MODELIZATION](#modelization)
+    - [Use Case Diagram](#use-case-diagram)
+    - [Class Diagram](#class-diagram)
+    - [Sequence Diagram for Choosing a Roadmap](#sequence-diagram-for-choosing-a-roadmap)
+    - [Sequence Diagram for Authentication with JWT](#sequence-diagram-for-authentication-with-jwt)
+  - [UI/UX](#uiux)
+    - [Graphic Charter](#graphic-charter)
+  - [REALIZATION](#realization)
+    - [Login page](#login-page)
+    - [Sign up page](#sign-up-page)
+    - [Homepage](#homepage)
+    - [Roadmaps page](#roadmaps-page)
+    - [Roadmap page](#roadmap-page)
+    - [Questions page](#questions-page)
+    - [Resources page](#resources-page)
+    - [Dashboard page](#dashboard-page)
+    - [404 page](#404-page)
+  - [TECHNOLOGICAL CHOICES](#technological-choices)
+    - [Technologies](#technologies)
+    - [Modelization](#modelization-1)
+    - [Frontend](#frontend)
+    - [Backend](#backend)
+    - [Database](#database)
+    - [Tools](#tools)
+    - [Modelization tool](#modelization-tool)
+    - [Sitemap generator](#sitemap-generator)
+    - [Planning Tool](#planning-tool)
+    - [Design Tool](#design-tool)
+    - [Package Managers](#package-managers)
+    - [Build Tools](#build-tools)
+    - [Git & Version Control](#git--version-control)
+  - [FUNCTIONALITY](#functionality)
+    - [Primary Functionalities](#primary-functionalities)
+    - [Secondary Functionalities](#secondary-functionalities)
+  - [IMPORTANT CONSTRAINTS](#important-constraints)
+    - [Accessibility](#accessibility)
+    - [Browser And Device Support](#browser-and-device-support)
+    - [Hosting](#hosting)
+    - [Ongoing Support And Maintenance](#ongoing-support-and-maintenance)
+    - [Assumptions](#assumptions)
+  - [PLANNING](#planning)
+    - [Kanban Board (Trello)](#kanban-board-trello)
+  - [Conclusion & Perspectives](#conclusion--perspectives)
 
 ## Problem
 
